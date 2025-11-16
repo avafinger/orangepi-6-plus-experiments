@@ -46,9 +46,48 @@ I would rather use Weston, which is faster than GNOME, but i could not run a Wes
 
 Contents will be added/changed soon. This is a WiP...
 
+A simple v4l2 command will reboot the board:
+
+```
+v4l2-ctl -d /dev/video1 --all
+Driver Info:
+	Driver name      : arm-china-isp
+	Card type        : linlon isp v4l2
+	Bus info         : platform:armcb_isp_v4l2-00
+	Driver version   : 6.1.44
+	Capabilities     : 0x85201000
+		Video Capture Multiplanar
+		Read/Write
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x05201000
+		Video Capture Multiplanar
+		Read/Write
+		Streaming
+		Extended Pix Format
+Media Driver Info:
+	Driver name      : imgsensor0
+	Model            : armcb_isp_v4l2
+	Serial           : 
+	Bus info         : platform:armcb_isp_v4l2-000
+	Media version    : 6.1.44
+	Hardware revision: 0x00000000 (0)
+	Driver version   : 6.1.44
+Interface Info:
+	ID               : 0x03000002
+	Type             : V4L Video
+Entity Info:
+	ID               : 0x00000001 (1)
+	Name             : armcb-00-vid-cap
+	Function         : V4L2 I/O
+Priority: 2
+```
+
+
 ## Gstreamer
 
-Gstreamer is a powefull tool to help grab the frames and display it on screen.
+Gstreamer is a poweful tool to help grab the frames and display it on screen.
 It can also utilize the Hardware encoder to record video from the camera(s) or stream videos in real-time across the network.
 At the other end, you can utilize the Hardware decoder to display the stream in real-time or display the recorded file.
 Currently only gstreamer can be used.
