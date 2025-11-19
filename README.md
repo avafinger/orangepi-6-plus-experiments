@@ -139,15 +139,25 @@ Gstreamer is provided by CIX/RADXA team.
 
 #### Camera 1
 
-to be completed.
+![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera1.png)
+
+- Pipeline:
+
+	to be completed.
 
 #### Camera 2
 
-to be completed.
+- Pipeline:
+
+	to be completed.
+
 
 #### Dual camera
 
-to be completed.
+- Pipeline:
+
+	to be completed.
+
    
 ## GStreamer hardware encoder and decoder
 
@@ -185,22 +195,11 @@ Enable VPU monitoring before running the experiments
 echo 3 | sudo tee /sys/kernel/debug/amvx/log/group/perf/enable > /dev/null
 ```
 
-## Hardware encoder
-
-For this experiments the Hardware decoding **v4l2h265dec** will be used.
 
 ### Gstreamer encoder
-![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
-![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam-cpu.png)
 
-```
-cat /sys/kernel/debug/amvx/log/group/perf/utilization
-VPU Utilization: 29.83%
+For this experiments the Hardware decoding **v4l2h265enc** will be used.
 
-cat /sys/kernel/debug/amvx/log/group/perf/realtime_fps 
-13:39:44 ~ 13:47:16 [ffff0002886d4138] HEVC encoder 1920x1080 12979 frames, current fps 29.92, average fps 28.27
-13:39:45 ~ 13:47:16 [ffff0002886c4138] HEVC encoder 1920x1080 12477 frames, current fps 26.16, average fps 27.23
-```
 
 #### Gstreamer pipeline encoder H265
 
@@ -215,6 +214,19 @@ For this experiments the Hardware decoding **v4l2h265dec** will be used.
 to be completed.
 
 ## Real time streaming
+
+![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
+![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam-cpu.png)
+
+```
+cat /sys/kernel/debug/amvx/log/group/perf/utilization
+VPU Utilization: 29.83%
+
+cat /sys/kernel/debug/amvx/log/group/perf/realtime_fps 
+13:39:44 ~ 13:47:16 [ffff0002886d4138] HEVC encoder 1920x1080 12979 frames, current fps 29.92, average fps 28.27
+13:39:45 ~ 13:47:16 [ffff0002886c4138] HEVC encoder 1920x1080 12477 frames, current fps 26.16, average fps 27.23
+```
+
 
 
 to be completed.
