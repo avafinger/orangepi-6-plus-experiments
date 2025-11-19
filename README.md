@@ -11,21 +11,20 @@ Soc | Board | Distro | Memory size | Kernel version | Camera | sensor | Max. win
 Table of Contents:
 
 - [Introduction](#introduction)
-- [Gstreamer](#gstreamer)
 - [MIPI Camera OV13855](#mipi-camera-ov13855)
 - [Gstreamer](#gstreamer)
-  - [H264](#h264)
-    - [Gstreamer pipeline H264](#gstreamer-pipeline-h264)
-  - [H265](#h265)
-    - [Gstreamer pipeline H265](#gstreamer-pipeline-h265)
-- [Hardware decoder](#hardware-decoder)
-  - [Gstreamer decoder](#gstreamer-decoder)
-- [Hardware encoder](#hardware-encoder)
+- [Gstreamer - Display camera content](#gstreamer---display-camera-content)
+  - [Camera 1](#camera-1)
+  - [Camera 2](#camera-2)
+  - [Dual camera](#dual-camera)
+- [GStreamer hardware encoder and decoder](#gstreamer-hardware-encoder-and-decoder)
   - [Gstreamer encoder](#gstreamer-encoder)
+    - [Gstreamer pipeline encoder H265](#gstreamer-pipeline-encoder-h265)
+  - [Gstreamer decoder](#gstreamer-decoder)
+  	- [Gstreamer pipeline decoder H265](#gstreamer-pipeline-decoder-h265)
 - [Real time streaming](#real-time-streaming)
 - [NPU](#npu)
-  - [SDL2](#sdl2)
-  - [SDL3](#sdl3)
+  - [Camera with NPU](#camera-with-npu)
 - [Issues](#issues)
 - [Acknowledgments](#acknowledgments)
 
@@ -86,6 +85,47 @@ Priority: 2
 ```
 
 
+## MIPI Camera OV13855
+
+The ov13855 sensor is capable of 4224x3136@30fps but for some reason i was able to grab only 1920x1080@30fps, 
+maybe an updated firmware or if the source code is released we can improve things here.
+
+The cameras are attached to cam1 and cam2 connectors near the sd card slot, see the manual for reference.
+In order to use cam1 and cam2 at the same time you must change the isp service that manage the cameras.
+
+**1. Change the line:**
+```
+ExecStart=/usr/bin/isp_app -s 0 &
+to
+ExecStart=/usr/bin/isp_app -m 2 &
+```
+
+**2. Use mcedit to edit, change the line and Save it with F2 then quit with F10**
+
+```
+sudo mcedit /lib/systemd/system/isp-daemon.service
+[Unit]
+Description=ISP Daemon
+After=network.target load-isp-modules.service
+
+[Service]
+Type=simple
+Environment=LD_LIBRARY_PATH="/usr/share/cix/lib"
+ExecStart=/usr/bin/isp_app -m 2 &
+Restart=always
+RestartSec=1
+StartLimitInterval=10
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+**3. Reboot the board with:**
+
+```
+sudo reboot
+```
 ## Gstreamer
 
 Gstreamer is a poweful tool to help grab the frames and display it on screen.
@@ -93,18 +133,61 @@ It can also utilize the Hardware encoder to record video from the camera(s) or s
 At the other end, you can utilize the Hardware decoder to display the stream in real-time or display the recorded file.
 Currently only gstreamer can be used.
 
-## MIPI Camera OV13855
+Gstreamer is provided by CIX/RADXA team.
 
-The ov13855 sensor is capable of 4224x3136@30fps but for some reason i was able to grab only 1920x1080@30fps, 
-maybe an updated firmware or if the source code is released we can improve things here.
+### Gstreamer - Display camera content
+
+#### Camera 1
+
+to be completed.
+
+#### Camera 2
 
 to be completed.
 
-## Hardware decoder
+#### Dual camera
 
 to be completed.
+   
+## GStreamer hardware encoder and decoder
+
+Hardware encoding and decoding are performed by the VPU (Video Processing Unit), which accelerates video encoding and decoding, making video playback more power-efficient and freeing up the CPU for other tasks.
+
+There are several encoders available with Gstreamer, but we will focus on Hardware Encoder: H265 (HEVC).
+
+```
+gst-inspect-1.0 | grep 'video4' | grep 'Encoder'
+video4linux2:  v4l2h264enc: V4L2 H.264 Encoder
+video4linux2:  v4l2h265enc: V4L2 H.265 Encoder
+video4linux2:  v4l2jpegenc: V4L2 JPEG Encoder
+video4linux2:  v4l2vp8enc: V4L2 VP8 Encoder
+video4linux2:  v4l2vp9enc: V4L2 VP9 Encoder
+```
+
+There are several decoders available with Gstreamer, but we will focus on Hardware Decoder: H265 (HEVC).
+
+```
+gst-inspect-1.0 | grep 'video4' | grep 'Decoder'
+video4linux2:  v4l2av1dec: V4L2 AV1 Decoder
+video4linux2:  v4l2h263dec: V4L2 H263 Decoder
+video4linux2:  v4l2h264dec: V4L2 H264 Decoder
+video4linux2:  v4l2h265dec: V4L2 H265 Decoder
+video4linux2:  v4l2jpegdec: V4L2 JPEG Decoder
+video4linux2:  v4l2mpeg2dec: V4L2 MPEG2 Decoder
+video4linux2:  v4l2mpeg4dec: V4L2 MPEG4 Decoder
+video4linux2:  v4l2vp8dec: V4L2 VP8 Decoder
+video4linux2:  v4l2vp9dec: V4L2 VP9 Decoder
+```
+
+Enable VPU monitoring before running the experiments
+
+```
+echo 3 | sudo tee /sys/kernel/debug/amvx/log/group/perf/enable > /dev/null
+```
 
 ## Hardware encoder
+
+For this experiments the Hardware decoding **v4l2h265dec** will be used.
 
 ### Gstreamer encoder
 ![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
@@ -119,9 +202,23 @@ cat /sys/kernel/debug/amvx/log/group/perf/realtime_fps
 13:39:45 ~ 13:47:16 [ffff0002886c4138] HEVC encoder 1920x1080 12477 frames, current fps 26.16, average fps 27.23
 ```
 
+#### Gstreamer pipeline encoder H265
+
+to be completed.
+
+### Gstreamer decoder
+
+For this experiments the Hardware decoding **v4l2h265dec** will be used.
+
+#### Gstreamer pipeline decoder H265
+
 to be completed.
 
 ## Real time streaming
+
+
+to be completed.
+
 
 ## NPU
 
