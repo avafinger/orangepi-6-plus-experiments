@@ -108,6 +108,7 @@ to be completed.
 
 ### Gstreamer encoder
 ![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
+![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam-cpu.png)
 
 ```
 cat /sys/kernel/debug/amvx/log/group/perf/utilization
