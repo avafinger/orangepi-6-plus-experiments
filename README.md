@@ -21,6 +21,7 @@ Table of Contents:
 - [Hardware decoder](#hardware-decoder)
   - [Gstreamer decoder](#gstreamer-decoder)
 - [Hardware encoder](#hardware-encoder)
+  - [Gstreamer encoder](#gstreamer-encoder)
 - [Real time streaming](#real-time-streaming)
 - [NPU](#npu)
   - [SDL2](#sdl2)
@@ -104,6 +105,18 @@ to be completed.
 to be completed.
 
 ## Hardware encoder
+
+### Gstreamer encoder
+![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
+
+```
+cat /sys/kernel/debug/amvx/log/group/perf/utilization
+VPU Utilization: 29.83%
+
+cat /sys/kernel/debug/amvx/log/group/perf/realtime_fps 
+13:39:44 ~ 13:47:16 [ffff0002886d4138] HEVC encoder 1920x1080 12979 frames, current fps 29.92, average fps 28.27
+13:39:45 ~ 13:47:16 [ffff0002886c4138] HEVC encoder 1920x1080 12477 frames, current fps 26.16, average fps 27.23
+```
 
 to be completed.
 
