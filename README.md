@@ -213,25 +213,37 @@ For this experiments the Hardware decoding **v4l2h265enc** will be used.
 
 #### Gstreamer pipeline encoder H265
 
-To record H265 (**HEVC**) with Matroska(**MKV**) conteiner, use the following pipelines:
+To record video with H.265 (HEVC) encoder and Matroska (MKV) container, use the following pipelines:
 
-	- Camera1
-		```
+- Camera1
+
+  This pipeline will save the video to the file **video_camera1_1920x1080.mkv**
+
+	
+		
 		gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls="encode,fixed_qp=28" ! video/x-h265,profile=main,level=\(string\)5 ! h265parse ! matroskamux ! filesink location=video_camera1_1920x1080.mkv
-		```
+		
 
-	- Camera2
-		```
+
+- Camera2
+
+  This pipeline will save the video to the file **video_camera2_1920x1080.mkv**
+  
+		
 		gst-launch-1.0 v4l2src device=/dev/video3 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls="encode,fixed_qp=28" ! video/x-h265,profile=main,level=\(string\)5 ! h265parse ! matroskamux ! filesink location=video_camera2_1920x1080.mkv
-		```
+		
 
 
-	- Camera1 and Camera2 at the same time
-		```
+
+- Camera1 and Camera2 at the same time
+
+  This pipeline will save the video to the files **video_camera1_1920x1080.mkv** and  **video_camera1_1920x1080.mkv** at the same time
+  
+		
 		gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls="encode,fixed_qp=28" ! video/x-h265,profile=main,level=\(string\)5 ! h265parse ! matroskamux ! filesink location=video_camera1_1920x1080.mkv v4l2src device=/dev/video3 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls="encode,fixed_qp=28" ! video/x-h265,profile=main,level=\(string\)5 ! h265parse ! matroskamux ! filesink location=video_camera2_1920x1080.mkv
-		```
+		
 
-to be completed.
+
 
 ### Gstreamer decoder
 
