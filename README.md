@@ -139,7 +139,9 @@ Gstreamer is provided by CIX/RADXA team.
 
 #### Camera 1
 
-![H265 Cam1 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera1.png)
+![H265 Camera1_fps_1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera1.png)
+![H265 Cam1 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/cam1.png)
+![H265 Cam1 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/cam1-cpu-load.png)
 
 - Pipeline:
 	```
@@ -156,6 +158,8 @@ Gstreamer is provided by CIX/RADXA team.
 
 
 #### Dual camera
+
+![H265 Daul_Camera 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-camera.png)
 
 - Pipeline:
 
