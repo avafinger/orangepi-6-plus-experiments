@@ -22,7 +22,10 @@ Table of Contents:
     - [Gstreamer pipeline encoder H265](#gstreamer-pipeline-encoder-h265)
   - [Gstreamer decoder](#gstreamer-decoder)
   	- [Gstreamer pipeline decoder H265](#gstreamer-pipeline-decoder-h265)
-- [Real time streaming](#real-time-streaming)
+- [Real-time streaming](#real-time-streaming)
+  - [Localhost live streaming](#localhost-live-streaming)
+  - [Network live streaming](#network-live-streaming)
+  - [RTSP live streaming](#rtsp-live-streaming)
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
 - [Issues](#issues)
@@ -210,7 +213,7 @@ echo 3 | sudo tee /sys/kernel/debug/amvx/log/group/perf/enable > /dev/null
 
 ### Gstreamer encoder
 
-For this experiments the Hardware decoder **v4l2h265enc** will be used.
+For this experiments the Hardware encoder **v4l2h265enc** will be used.
 
 
 #### Gstreamer pipeline encoder H265
@@ -264,11 +267,22 @@ To display the **H.265** (**HEVC**) video recorded above in **MKV**, the followi
 		gst-launch-1.0 filesrc location=video_camera1_1920x1080.mkv ! matroskademux ! h265parse ! v4l2h265dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true
 
 
-## Real time streaming
 
-This experiment streams videos from the Orange Pi 6 Plus to a Intel Box, the encoder used is H.265 (HEVC) and decoded and displayed on the receiving end (Intel Box)
+## Real-time streaming
 
-[Orangepi 6 plus] --> [H265 encoder] --> [TCP - ethernet] --> [Intel Box] --> [H265 decoder] --> [Display it on screen]
+
+This experiment streams videos from the Orange Pi 6 Plus to an Intel Box, the encoder used is H.265 (HEVC) and decoded and displayed on the receiving end (Intel Box)
+Live streaming with RTSP experiments.
+
+
+### Localhost live streaming
+
+[Client: Orangepi 6 plus] --> [H265 encoder] --> [TCP - localhost] --> [Server; Orangepi 6 plus] --> [H265 decoder] --> [Display it on screen]
+
+
+### Network live streaming
+
+[Client: Orangepi 6 plus] --> [H265 encoder] --> [TCP - ethernet] --> [Server: Intel Box] --> [H265 decoder] --> [Display it on screen]
 
 ![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
 ![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam-cpu.png)
@@ -283,6 +297,7 @@ cat /sys/kernel/debug/amvx/log/group/perf/realtime_fps
 ```
 
 
+### RTSP live streaming
 
 to be completed.
 
@@ -293,13 +308,6 @@ The NPU experiments with the camera will be possible when cix-opencv deb package
 
 to be completed.
 
-## SDL2
-
-to be completed.
-
-## SDL3
-
-to be completed.
 
 ## Issues
 
