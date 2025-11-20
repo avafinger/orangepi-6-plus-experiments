@@ -13,7 +13,7 @@ Table of Contents:
 - [Introduction](#introduction)
 - [MIPI Camera OV13855](#mipi-camera-ov13855)
 - [Gstreamer](#gstreamer)
-- [Gstreamer - Display camera content](#gstreamer---display-camera-content)
+- [Gstreamer - Display camera content on screen](#gstreamer---display-camera-content-on-screen)
   - [Camera 1](#camera-1)
   - [Camera 2](#camera-2)
   - [Dual camera](#dual-camera)
@@ -135,28 +135,34 @@ Currently only gstreamer can be used.
 
 Gstreamer is provided by CIX/RADXA team.
 
-### Gstreamer - Display camera content
+### Gstreamer - Display camera content on screen
 
 #### Camera 1
 
-![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera1.png)
+![H265 Cam1 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera1.png)
 
 - Pipeline:
-
-	to be completed.
+	```
+	gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoconvert ! glimagesink
+ 	```
 
 #### Camera 2
 
+![H265 Cam2 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera2.png)
+
 - Pipeline:
 
-	to be completed.
+	gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoconvert ! fakesink v4l2src device=/dev/video3 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoconvert ! glimagesink
 
 
 #### Dual camera
 
 - Pipeline:
 
-	to be completed.
+ 	**Type the command in the Terminal and move the first image on the screen to the side or resize the window with your mouse.**
+	```
+	gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoconvert ! autovideosink v4l2src device=/dev/video3 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoconvert ! autovideosink
+ 	```
 
    
 ## GStreamer hardware encoder and decoder
