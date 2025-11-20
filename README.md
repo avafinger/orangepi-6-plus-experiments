@@ -296,6 +296,7 @@ to be completed.
 - Camera2 seems to be in preview mode
 - Camera2 has some tearings, most likely a DMA buf issue
 - Cameras are capped at 1920x1080
+- When streaming both Camera1 and Camera2 at the same time, the latency is noticeable (My Intel Box is ancient)
 
 ## Acknowledgments
 
