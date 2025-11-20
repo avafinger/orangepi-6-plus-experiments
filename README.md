@@ -1,5 +1,5 @@
 # Orange Pi 6 Plus experiments
-These are my experiments with the cameras on CIX P1 SBC available on Orange Pi 6 Plus
+These are my experiments with the cameras on Orange Pi 6 Plus (CIX P1 SBC).
 
 ## Supported cameras
 
@@ -86,6 +86,8 @@ Priority: 2
 
 
 ## MIPI Camera OV13855
+
+Orange Pi 6 Plus has two MIPI-CSI camera interfaces, cam1 and cam2 and can be used at the same time.
 
 The ov13855 sensor is capable of 4224x3136@30fps but for some reason i was able to grab only 1920x1080@30fps, 
 maybe an updated firmware or if the source code is released we can improve things here.
