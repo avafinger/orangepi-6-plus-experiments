@@ -210,12 +210,12 @@ echo 3 | sudo tee /sys/kernel/debug/amvx/log/group/perf/enable > /dev/null
 
 ### Gstreamer encoder
 
-For this experiments the Hardware decoding **v4l2h265enc** will be used.
+For this experiments the Hardware decoder **v4l2h265enc** will be used.
 
 
 #### Gstreamer pipeline encoder H265
 
-To record video with H.265 (HEVC) encoder and Matroska (MKV) container, use the following pipelines:
+To record video with **H.265** (**HEVC**) encoder and Matroska (MKV) container, use the following pipelines:
 
 - Camera1
 
@@ -249,17 +249,17 @@ To record video with H.265 (HEVC) encoder and Matroska (MKV) container, use the 
 
 ### Gstreamer decoder
 
-For this experiments the Hardware decoding **v4l2h265dec** will be used.
+For this experiments the Hardware decoder **v4l2h265dec** will be used.
 
-#### Gstreamer pipeline decoder H.265 (HEVC)
+#### Gstreamer pipeline decoder H265
 
-To display the video recorded above in **MKV** the following pipelines can be used:
+To display the **H.265** (**HEVC**) video recorded above in **MKV**, the following pipelines can be used:
 	
   - using **decodebin** for any encoder
 	
 		gst-launch-1.0 filesrc location=video_camera1_1920x1080.mkv ! decodebin ! glupload ! glcolorconvert ! glcolorbalance ! glimagesink
 
-- using **v4l2h265dec** for MKV
+- using **v4l2h265dec** for MKV container
 
 		gst-launch-1.0 filesrc location=video_camera1_1920x1080.mkv ! matroskademux ! h265parse ! v4l2h265dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true
 
