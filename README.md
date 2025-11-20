@@ -255,6 +255,10 @@ to be completed.
 
 ## Real time streaming
 
+This experiment streams videos from the Orange Pi 6 Plus to a Intel Box, the encoder used is H.265 (HEVC) and decoded and displayed on the receiving end (Intel Box)
+
+[Orangepi 6 plus] --> [H265 encoder] --> [TCP - ethernet] --> [Intel Box] --> [H265 decoder] --> [Display it on screen]
+
 ![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
 ![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam-cpu.png)
 
@@ -288,7 +292,10 @@ to be completed.
 
 ## Issues
 
-Once you issue a wrong command, the kernel may crash, or a reboot is needed.
+- Once you issue a wrong command, the kernel may crash, or a reboot is needed.
+- Camera2 seems to be in preview mode
+- Camera2 has some tearings, most likely a DMA buf issue
+- Cameras are capped at 1920x1080
 
 ## Acknowledgments
 
