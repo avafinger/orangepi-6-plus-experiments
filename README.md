@@ -251,9 +251,18 @@ To record video with H.265 (HEVC) encoder and Matroska (MKV) container, use the 
 
 For this experiments the Hardware decoding **v4l2h265dec** will be used.
 
-#### Gstreamer pipeline decoder H265
+#### Gstreamer pipeline decoder H.265 (HEVC)
 
-to be completed.
+To display the video recorded above in **MKV** the following pipelines can be used:
+	
+  - using **decodebin** for any encoder
+	
+		gst-launch-1.0 filesrc location=video_camera1_1920x1080.mkv ! decodebin ! glupload ! glcolorconvert ! glcolorbalance ! glimagesink
+
+- using **v4l2h265dec** for MKV
+
+		gst-launch-1.0 filesrc location=video_camera1_1920x1080.mkv ! matroskademux ! h265parse ! v4l2h265dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true
+
 
 ## Real time streaming
 
