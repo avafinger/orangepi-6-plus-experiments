@@ -22,6 +22,7 @@ Table of Contents:
     - [Gstreamer pipeline encoder H265](#gstreamer-pipeline-encoder-h265)
   - [Gstreamer decoder](#gstreamer-decoder)
   	- [Gstreamer pipeline decoder H265](#gstreamer-pipeline-decoder-h265)
+- [Record video and display it on the screen](#record-video-and-display-it-on-the-screen)
 - [Real-time streaming](#real-time-streaming)
   - [Localhost live streaming](#localhost-live-streaming)
   - [Network live streaming](#network-live-streaming)
@@ -267,11 +268,17 @@ To display the **H.265** (**HEVC**) video recorded above in **MKV**, the followi
 		gst-launch-1.0 filesrc location=video_camera1_1920x1080.mkv ! matroskademux ! h265parse ! v4l2h265dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true
 
 
+## Record video and display it on the screen
+
+To record video and display it on screen at the same time, use the following pipeline:
+
+  	gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! tee name=t t. ! queue ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls="encode,fixed_qp=28" ! video/x-h265,profile=main,level=\(string\)5 ! filesink location=video_camera1_1920x1080.hevc t. ! queue ! videoconvert ! glimagesink
+
 
 ## Real-time streaming
 
 
-This experiment streams videos from the Orange Pi 6 Plus to an Intel Box, the encoder used is H.265 (HEVC) and decoded and displayed on the receiving end (Intel Box)
+This experiment streams videos from the Orange Pi 6 Plus to an Intel Box, the encoder used is H.265 (HEVC) and decoded and displayed on the receiving end (Intel Box),
 Live streaming with RTSP experiments.
 
 
