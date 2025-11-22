@@ -1,5 +1,5 @@
 # Orange Pi 6 Plus experiments
-These are my experiments with the cameras on Orange Pi 6 Plus (CIX P1 SBC).
+Experiments with Orange Pi 6 Plus (CIX P1 SBC) and MIPI-CSI camera (ov13855).
 
 ## Supported cameras
 
@@ -165,7 +165,7 @@ Gstreamer is provided by CIX/RADXA team.
 
 #### Dual camera
 
-![H265 Dual_Camera 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-camera.png)
+![H265 Dual_Camera 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
 
 - Pipeline:
 
@@ -284,8 +284,15 @@ Live streaming with RTSP experiments.
 
 ### Localhost live streaming
 
-[Client: Orangepi 6 plus] --> [H265 encoder] --> [TCP - localhost] --> [Server; Orangepi 6 plus] --> [H265 decoder] --> [Display it on screen]
+[Client: Orangepi 6 plus] --> [H265 encoder] --> [TCP - localhost] --> [Server: Orangepi 6 plus] --> [H265 decoder] --> [Display it on screen]
 
+**Client**
+
+  	gst-launch-1.0 tcpserversrc port=5000 host=0.0.0.0 ! h265parse ! v4l2h265dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
+
+**Server**
+
+	gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls="encode,fixed_qp=28" ! video/x-h265,profile=main,level=\(string\)5 ! tcpclientsink host=localhost port=5000
 
 ### Network live streaming
 
@@ -293,6 +300,18 @@ Live streaming with RTSP experiments.
 
 ![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
 ![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam-cpu.png)
+
+**Client (Orange Pi 6 Plus)**
+
+IP: 192.168.254.75
+
+  	gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls="encode,fixed_qp=28" ! video/x-h265,profile=main,level=\(string\)5 ! tcpclientsink host=192.168.254.253 port=5000
+
+**Server (Intel Box)**
+
+IP: 192.168.254.253
+
+  	gst-launch-1.0 tcpserversrc port=5000 host=0.0.0.0 ! h265parse ! v4l2h265dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
 
 ```
 cat /sys/kernel/debug/amvx/log/group/perf/utilization
