@@ -333,7 +333,8 @@ to be completed.
 The NPU experiments with the camera will be possible when cix-opencv deb package is available, it might have some Hardware acceleration.
 With the help of v4l2loopback i'm able to run python3 yolox demo v4l2 from the SDK.
 
-The trick is to redirect the camera output to an v4l2looback device, in the example below we can see NPU inference with live stream using a Webcam 720p and mipi-csi ov13855 (1920x1080).
+The trick is to redirect the camera output to an v4l2looback device, in the example below we can see NPU inference with live streaming using a Webcam 720p and mipi-csi ov13855 (1920x1080).
+Webcam does not require the use of v4l2loopback.
 
 **NPU with webcam**
 ![Webcam load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/yolox_demo_webcam_load.png)
