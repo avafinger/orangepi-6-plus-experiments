@@ -139,6 +139,12 @@ It can also utilize the Hardware encoder to record video from the camera(s) or s
 At the other end, you can utilize the Hardware decoder to display the stream in real-time or display the recorded file.
 Currently only gstreamer can be used.
 
+```
+Available pixel formats for /dev/video1:
+  NM12 (32314d4e), Y/UV 4:2:0 (N-C), flags = 0
+  RGB3 (33424752), 24-bit RGB 8-8-8, flags = 0
+```
+
 Gstreamer is provided by CIX/RADXA team.
 
 ### Gstreamer - Display camera content on screen
@@ -278,8 +284,10 @@ To record video and display it on screen at the same time, use the following pip
 ## Real-time streaming
 
 
-This experiment streams videos from the Orange Pi 6 Plus to an Intel Box, the encoder used is H.265 (HEVC) and decoded and displayed on the receiving end (Intel Box),
-Live streaming with RTSP experiments.
+This experiment streams live videos from the Orange Pi 6 Plus to an Intel Box, the encoder used is H.265 (HEVC). It is decoded and displayed on the receiving end (Intel Box). 
+
+- Live streaming with RTSP is on the to-do list, but requires to dig into gstreamer.
+
 
 
 ### Localhost live streaming
@@ -331,6 +339,60 @@ to be completed.
 ## NPU
 
 The NPU experiments with the camera will be possible when cix-opencv deb package is available, it might have some Hardware acceleration.
+
+For the experiments i overclocked it to "performance" and in Debian Settings i selected **Performance**
+
+```
+echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+```
+
+To check if NPU was running fine i used the C++ example from here:
+
+```
+https://github.com/swdee/orion-o6-npu-yolov8
+```
+
+The results:
+
+```
+./yolov8 yolov8n.cix bus.jpg 0.30 0.45
+NOE context initialized
+Model/Graph loaded
+Created Job: 4294967297
+Tensor Counts, Input=1, Output=1
+Input tensor descriptor:
+  id:          0
+  size:        1228800
+  scale:       255
+  zero_point:  0
+  data_type:   U8
+Output tensor descriptor:
+  id:          0
+  size:        1411200
+  scale:       1
+  zero_point:  0
+  data_type:   F16
+Tensor load time: 0.056068 ms
+Inference sync time: 14.2102 ms
+Fetch outputs time: 2.99879 ms
+person 0.879 (108,236,224,540)
+person 0.879 (211,240,284,508)
+person 0.844 (476,219,560,516)
+bus 0.805 (100,132,552,445)
+```
+
+As the board is small and has the performance governor set, the results can vary across experiments.
+
+I think the results could be improved if they release new optimizations and source code.
+
+I also set tue NPU to "performance" but no real improvement.
+
+```
+echo performance | tee /sys/class/devfreq/14230000.vpu/governor
+```
+
+### Camera with NPU
+
 With the help of v4l2loopback i'm able to run python3 yolox demo v4l2 from the SDK.
 
 The trick is to redirect the camera output to an v4l2looback device, in the example below we can see NPU inference with live streaming using a Webcam 720p and mipi-csi ov13855 (1920x1080).
