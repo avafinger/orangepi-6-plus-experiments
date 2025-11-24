@@ -145,9 +145,9 @@ Gstreamer is provided by CIX/RADXA team.
 
 #### Camera 1
 
-![H265 Camera1_fps_1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera1.png)
-![H265 Cam1 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/cam1.png)
-![H265 Cam1 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/cam1-cpu-load.png)
+![H265 Camera1_fps_1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera1.jpg)
+![H265 Cam1 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/cam1.jpg)
+![H265 Cam1 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/cam1-cpu-load.jpg)
 
 - Pipeline:
 	```
@@ -156,7 +156,7 @@ Gstreamer is provided by CIX/RADXA team.
 
 #### Camera 2
 
-![H265 Cam2 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera2.png)
+![H265 Cam2 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/camera2.jpg)
 
 - Pipeline:
 	```
@@ -165,7 +165,7 @@ Gstreamer is provided by CIX/RADXA team.
 
 #### Dual camera
 
-![H265 Dual_Camera 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
+![H265 Dual_Camera 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.jpg)
 
 - Pipeline:
 
@@ -298,8 +298,8 @@ Live streaming with RTSP experiments.
 
 [Client: Orangepi 6 plus] --> [H265 encoder] --> [TCP - ethernet] --> [Server: Intel Box] --> [H265 decoder] --> [Display it on screen]
 
-![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.png)
-![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam-cpu.png)
+![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam.jpg)
+![H265 Dual Cam 1920x1080 streaming](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/dual-cam-cpu.jpg)
 
 **Client (Orange Pi 6 Plus)**
 
@@ -337,13 +337,13 @@ The trick is to redirect the camera output to an v4l2looback device, in the exam
 Webcam does not require the use of v4l2loopback.
 
 **NPU with webcam**
-![Webcam load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/yolox_demo_webcam_load.png)
+![Webcam load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/yolox_demo_webcam_load.jpg)
 
 **NPU with MIPI-CSI camera (ov13855)**
 
-![MIPI-CSI 1920x1080](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/yolox_demo_mipi_camera.png)
+![MIPI-CSI 1920x1080](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/yolox_demo_mipi_camera.jpg)
 
-![MIPI-CSI 1920x1080 load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/yolox_demo_mpi_camera_load.png)
+![MIPI-CSI 1920x1080 load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/yolox_demo_mpi_camera_load.jpg)
 
 to be completed.
 
