@@ -370,13 +370,13 @@ You need to build RTSP Server to stream live videos from the Orange Pi.
 **H265 (HEVC)**
 
 ```
-gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test latency=100 ! rtph265depay ! h265parse ! v4l2h265dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
+gst-launch-1.0 rtspsrc location=rtsp://192.168.254.77:8554/test latency=100 ! rtph265depay ! h265parse ! avdec_h265 ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
 ```
 
 **H264**
 
 ```
-gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test latency=100 ! rtph264depay ! h264parse ! v4l2h264dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
+gst-launch-1.0 rtspsrc location=rtsp://192.168.254.77:8554/test latency=100 ! rtph265depay ! h265parse ! avdec_h265 ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
 ```
 
 
