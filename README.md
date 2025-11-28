@@ -286,7 +286,8 @@ To record video and display it on screen at the same time, use the following pip
 
 This experiment streams live videos from the Orange Pi 6 Plus to an Intel Box, the encoder used is H.265 (HEVC). It is decoded and displayed on the receiving end (Intel Box). 
 
-- Live streaming with RTSP is on the to-do list, but requires to dig into gstreamer.
+- Live streaming with TCPIP (client / server)
+- Live streaming with RTSP.
 
 
 
@@ -333,7 +334,50 @@ cat /sys/kernel/debug/amvx/log/group/perf/realtime_fps
 
 ### RTSP live streaming
 
-to be completed.
+Real-Time Streaming Protocol (RTSP) works fine.
+In this experiment, i stream video using RTSP from Orange Pi 6 Plus to an Intel Box (x64).
+You need to build RTSP Server to stream live videos from the Orange Pi.
+
+* Orange Pi 6 Plus (Server)
+
+  	IP: 192.168.254.77
+
+* Intel Box (Client)
+
+	IP: 192.168.254.253
+
+### RTSP Pipeline on Orange Pi 6 Plus that will feed a live stream to clients:
+
+**H265 (HEVC)**
+![H265 Camera1_fps_1920x1080 streaming RTSP](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/rtsp_h265_over_wifi.jpg)
+
+```
+./test-launch "( v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls=encode,fixed_qp=28 ! video/x-h265,profile=main,level=(string)5 ! rtph265pay name=pay0 pt=96 )"
+```
+
+**H264**
+![H264 Camera1_fps_1920x1080 streaming RTSP](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/rtsp_h264_over_wifi.jpg)
+
+```
+./test-launch "( v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h264enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls=encode,fixed_qp=28 ! video/x-h264,profile=main,level=(string)5 ! rtph264pay name=pay0 pt=96 )"
+```
+
+**CPU Load**
+![CPU Load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/rtsp_cpu_load_wifi.jpg)
+
+### RTSP Pipeline on Intel Box that will receive the stream and display it on screen:	
+
+**H265 (HEVC)**
+
+```
+gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test latency=100 ! rtph265depay ! h265parse ! v4l2h265dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
+```
+
+**H264**
+
+```
+gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test latency=100 ! rtph264depay ! h264parse ! v4l2h264dec ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
+```
 
 
 ## NPU
