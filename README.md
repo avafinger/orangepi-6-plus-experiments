@@ -346,6 +346,16 @@ You need to build RTSP Server to stream live videos from the Orange Pi.
 
 	IP: 192.168.254.253
 
+Build the GNU test-launch for the RTSP server experiment:
+
+```
+cd rtsp
+LD_LIBRARY_PATH=/usr/share/cix/lib gcc -O2 -o test-launch test-launch.c -I/usr/share/cix/include/gstreamer-1.0/ -I/usr/include/glib-2.0/ -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -L/usr/share/cix/lib -lgstreamer-1.0 -lgstrtspserver-1.0 -lgobject-2.0 -lglib-2.0 -lpthread -lpng -lz -lm -lpthread -ldrm -ltiff -llzma -lssl
+ls -la test-launch
+-rwxr-xr-x 1 orangepi orangepi 71856 Nov 30 02:35 test-launch
+```
+
+
 ### RTSP Pipeline on Orange Pi 6 Plus that will feed a live stream to clients:
 
 **H265 (HEVC)**
