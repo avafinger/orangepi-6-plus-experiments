@@ -27,6 +27,7 @@ Table of Contents:
   - [Localhost live streaming](#localhost-live-streaming)
   - [Network live streaming](#network-live-streaming)
   - [RTSP live streaming](#rtsp-live-streaming)
+  - [RTMP live streaming](#rtmp-live-streaming)
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
 - [Issues](#issues)
@@ -288,7 +289,7 @@ This experiment streams live videos from the Orange Pi 6 Plus to an Intel Box, t
 
 - Live streaming with TCPIP (client / server)
 - Live streaming with RTSP.
-
+- Live streaming with RTMP.
 
 
 ### Localhost live streaming
@@ -389,6 +390,31 @@ gst-launch-1.0 rtspsrc location=rtsp://192.168.254.77:8554/test latency=100 ! rt
 gst-launch-1.0 rtspsrc location=rtsp://192.168.254.77:8554/test latency=100 ! rtph265depay ! h265parse ! avdec_h265 ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
 ```
 
+### RTMP live streaming
+
+RTMP (Real-Time Messaging Protocol) streaming can be used with an RTMP server, such as nginx or any other server.
+
+In the experiment, gstreamer is used to push the camera video stream to the rtmp server (orangepi 6 plus) and gstreamer or ffmpeg as a client (x64) to decode and show the live streams.
+
+- rtmp pusher (orange pi 6 plus)
+
+```
+gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920, height=1080 ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h264enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls=encode,fixed_qp=28 ! video/x-h264,profile=main,level='(string)5'! h264parse ! flvmux ! rtmpsink sync=true async=true location=rtmp://127.0.0.1/live/stream
+```
+  
+- rtmp clients (x64)
+
+  * gstreamer
+
+	```
+  	gst-launch-1.0 rtmpsrc location="rtmp://192.168.254.77:1935/live/stream live=1" ! flvdemux ! h264parse ! avdec_h264 ! fpsdisplaysink video-sink=autovideosink text-overlay=true sync=false
+  	```
+ 
+  * ffmpeg
+
+	```
+  	DISPLAY=:0.0 ffplay -fflags nobuffer -i rtmp://192.168.254.77:1935/live/stream
+  	```
 
 ## NPU
 
