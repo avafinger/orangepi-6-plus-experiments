@@ -28,6 +28,7 @@ Table of Contents:
   - [Network live streaming](#network-live-streaming)
   - [RTSP live streaming](#rtsp-live-streaming)
   - [RTMP live streaming](#rtmp-live-streaming)
+- [SDL3](#sdl3)
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
 - [Issues](#issues)
@@ -415,6 +416,36 @@ gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,format=NV12, width=1920,
 	```
   	DISPLAY=:0.0 ffplay -fflags nobuffer -i rtmp://192.168.254.77:1935/live/stream
   	```
+## SDL3
+
+SDL - Simple DirectMedia Layer version 3 is the latest version used in this experiment. **testffmpeg** decodes (with hardware codecs) and display live streams (check: https://github.com/libsdl-org/SDL).
+The official testffmpeg example crashes with a coredump, so i provided a fix for that and we can display RTSP and RTMP streaming.
+
+After cloning we can verify if it works:
+
+```
+cd SDL3
+sudo chmod +x testffmpeg
+```
+
+Running **testffmpeg** to see if it is Okay:
+
+```
+./testffmpeg --video-codec av1_v4l2m2m --sprites 10 ~/test_videos/Big_Buck_Bunny_1080_10s_30MB_av1.mp4 
+./testffmpeg --video-codec h264_v4l2m2m --sprites 10 ~/test_videos/Big_Buck_Bunny_1080_10s_30MB_h264.mp4 
+```
+
+RTSP with H265 (hevc) - Client Orange Pi 6 Plus
+
+```
+./testffmpeg --video-codec hevc_v4l2m2m rtsp://127.0.0.1:8554/test
+```
+
+RTSP with H264 - Client Orange Pi 6 Plus
+
+```
+./testffmpeg --video-codec h264_v4l2m2m rtsp://127.0.0.1:8554/test
+```
 
 ## NPU
 
