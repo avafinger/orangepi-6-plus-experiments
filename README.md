@@ -7,6 +7,8 @@ Soc | Board | Distro | Memory size | Kernel version | Camera | sensor | Max. win
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera1 | ov13855 | 1920x1080 | 30 fps
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera2 | ov13855 | 1920x1080 | 30 fps
+| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera3 | webcam 720p | 640x480 | 30 fps
+| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera4 | webcam  | 640x480 | 30 fps
 
 Table of Contents:
 
@@ -540,6 +542,18 @@ Multiple cameras:
 
 Multiple cameras stress test:
 ![MIPI-CSI 1920x1080 and Webcam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/npu_cam1_cam2_cam3_load.jpg)
+
+4 cameras stress test - 2 csi (1920x1080) + 2 USB 2.0 (640x480) + NPU:
+
+	ls /dev/video*
+	/dev/video0   /dev/video11  /dev/video4  /dev/video7  /dev/video-cixdec0
+	/dev/video1   /dev/video2   /dev/video5  /dev/video8
+	/dev/video10  /dev/video3   /dev/video6  /dev/video9
+
+It ran for more than 15 min but the MIPI-CSI cameras crashed the v4l2 isp, webcam was still running.
+![2 MIPI-CSI 1920x1080 and 2 Webcam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/cam1_1920x1080_cam2_1920x1080_cam3_640x480_cam4_640_480.jpg)
+
+
 
 ## Issues
 
