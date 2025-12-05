@@ -31,6 +31,7 @@ Table of Contents:
 - [SDL3](#sdl3)
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
+  - [Multiple cameras with NPU](#multiple-cameras-with-npu)
 - [Issues](#issues)
 - [Acknowledgments](#acknowledgments)
 
@@ -518,8 +519,27 @@ Webcam does not require the use of v4l2loopback.
 
 ![MIPI-CSI 1920x1080 load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/yolox_demo_mpi_camera_load.jpg)
 
-to be completed.
+### Multiple cameras with NPU
 
+Stressing NPU with 2 mipi-csi cameras (ov13855) plus webcam 720p, using python3 and v4l2loopback.
+
+```
+sudo modprobe v4l2loopback devices=2
+```
+
+Created new device nodes for the 2 mipi-csi cameras and the webcam 720p:
+
+	ls /dev/video*
+	/dev/video0  /dev/video3  /dev/video6  /dev/video9
+	/dev/video1  /dev/video4  /dev/video7  /dev/video-cixdec0
+	/dev/video2  /dev/video5  /dev/video8
+
+
+Multiple cameras:
+![MIPI-CSI 1920x1080 and Webcam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/npu_cam1_cam2_cam3.jpg)
+
+Multiple cameras stress test:
+![MIPI-CSI 1920x1080 and Webcam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/npu_cam1_cam2_cam3_load.jpg)
 
 ## Issues
 
