@@ -450,6 +450,13 @@ RTSP with H264 - Client Orange Pi 6 Plus
 ./testffmpeg --video-codec h264_v4l2m2m rtsp://127.0.0.1:8554/test
 ```
 
+For the best performance, prepend SDL_VIDEO_DRIVER=wayland otherwise SDL3 will use x11
+
+```
+SDL_VIDEO_DRIVER=wayland ./testffmpeg --video-codec h264_v4l2m2m rtsp://127.0.0.1:8554/test
+```
+
+
 ## NPU
 
 The NPU experiments with the camera will be possible when cix-opencv deb package is available, it might have some Hardware acceleration.
