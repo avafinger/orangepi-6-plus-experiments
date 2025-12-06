@@ -460,7 +460,7 @@ For the experiments i overclocked it to "performance" and in Debian Settings i s
 echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 ```
 
-To check if NPU was running fine i used the C++ example from here:
+To check if NPU is running fine i used the C++ example from here:
 
 ```
 https://github.com/swdee/orion-o6-npu-yolov8
@@ -499,7 +499,7 @@ As the board is small and has the performance governor set, the results can vary
 
 I think the results could be improved if they release new optimizations and source code.
 
-I also set tue NPU to "performance" but no real improvement.
+I also set tue VPU to "performance" but no real improvement.
 
 ```
 echo performance | tee /sys/class/devfreq/14230000.vpu/governor
