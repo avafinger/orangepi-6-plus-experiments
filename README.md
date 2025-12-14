@@ -481,6 +481,14 @@ Open a Terminal and run (ESC to quit):
 ./sdl_capture -format NM12 -device /dev/video1 -size 1920x1080 
 ```
 
+### CPU load comparision
+
+SDL3 v4l2 (CPU%)
+![SDL3 v4l2](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/sdl3_capture_opengles2.png)
+
+Gstreamer (CPU%)
+![Gstreamer](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/gstreamer_capture.png)
+
 ## NPU
 
 The NPU experiments with the camera will be possible when cix-opencv deb package is available, it might have some Hardware acceleration.
