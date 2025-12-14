@@ -456,6 +456,30 @@ For the best performance, prepend SDL_VIDEO_DRIVER=wayland otherwise SDL3 will u
 SDL_VIDEO_DRIVER=wayland ./testffmpeg --video-codec h264_v4l2m2m rtsp://127.0.0.1:8554/test
 ```
 
+### SDL3 v4l2 camera
+
+An SDL3 app for testing, checking if we can capture frames from the MIPI-CSI camera without requiring Gstreamer.
+
+Checking if opengles2 is working (ESC to quit):
+
+```
+cd SDL3
+sudo chmod +x SDL3_test
+./sdl3_test
+```
+
+Testing if we can capture frames using V4l2:
+
+```
+cd SDL3
+sudo chmod +x sdl_capture
+```
+
+Open a Terminal and run (ESC to quit):
+
+```
+./sdl_capture -format NM12 -device /dev/video1 -size 1920x1080 
+```
 
 ## NPU
 
