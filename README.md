@@ -31,6 +31,7 @@ Table of Contents:
   - [RTSP live streaming](#rtsp-live-streaming)
   - [RTMP live streaming](#rtmp-live-streaming)
 - [SDL3](#sdl3)
+- [HTOP](#htop)
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
   - [Multiple cameras with NPU](#multiple-cameras-with-npu)
@@ -489,6 +490,28 @@ SDL3 v4l2 (CPU%)
 Gstreamer (CPU%)
 ![Gstreamer](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/gstreamer_capture.png)
 
+
+## HTOP
+
+A modified version of the Htop to monitor the health of the board, CPU usage, wlan and eth (1 and 2).
+![Htop](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/htop.jpg)
+
+### Build htop
+
+```
+cd htop
+make -f Makefile
+ls distrib/bin/
+htop
+#running
+distrib/bin/htop
+```
+### Add new available Meters (F2)
+
+* Add the new Meters: CPUx (1...12), Wlan0, Eth0 and Eth1
+* Mark in F2 -> Display Options -> [x] Detailed CPU Time (System/IO-Wait/Hard-IRQ/Soft-IRQSteal/Guest)
+* Change Colors if you use Gnome-terminal
+  
 ## NPU
 
 The NPU experiments with the camera will be possible when cix-opencv deb package is available, it might have some Hardware acceleration.
@@ -604,4 +627,4 @@ It ran for more than 15 min but the MIPI-CSI cameras crashed the v4l2 isp, webca
 
 ## Acknowledgments
 
-I would like to thank me and myself for taking the time
+3djelly for the NPU example and tips to build the necessary packages.
