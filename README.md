@@ -14,6 +14,7 @@ Table of Contents:
 
 - [Introduction](#introduction)
 - [MIPI Camera OV13855](#mipi-camera-ov13855)
+- [Packages for dev](#packages-for-dev)
 - [Gstreamer](#gstreamer)
 - [Gstreamer - Display camera content on screen](#gstreamer---display-camera-content-on-screen)
   - [Camera 1](#camera-1)
@@ -93,6 +94,40 @@ Entity Info:
 	Function         : V4L2 I/O
 Priority: 2
 ```
+
+## Packages for dev
+
+To build some applications, like gstreamer, ffmpeg, sdl3, htop, etc.., some dev packages and dependencies are needed to be installed.
+
+Here is a summary i installed so far:
+
+```
+sudo apt-get install debhelper-compat dh-exec dh-sequence-gnome gnome-pkg-tools gnome-settings-daemon-dev gsettings-desktop-schemas-dev gtk-doc-tools libcanberra-gtk3-dev libcolord-dev libgbm-dev libgnome-desktop-3-dev libgtk-3-dev libgudev-1.0-dev libinput-dev liblcms2-dev libnvidia-egl-wayland-dev libpam0g-dev libpipewire-0.3-dev libstartup-notification0-dev libsystemd-dev libwacom-dev libx11-xcb-dev libxcb-randr0-dev libxcb-res0-dev libxkbcommon-x11-dev libxkbfile-dev python3-dbusmock sysprof xcvt xvfb
+```
+
+and
+
+```
+sudo apt-get install clang glslang-dev flite1-dev frei0r-plugins-dev ladspa-sdk libaom-dev libaribb24-dev libass-dev libbluray-dev libbs2b-dev libbz2-dev libcaca-dev libcdio-paranoia-dev libchromaprint-dev libcodec2-dev libdav1d-dev libffmpeg-nvenc-dev libgme-dev libgnutls28-dev libgsm1-dev libiec61883-dev libavc1394-dev libjack-jackd2-dev libjxl-dev liblilv-dev libmysofa-dev libopenal-dev libomxil-bellagio-dev libopencore-amrnb-dev libopencore-amrwb-dev libopenmpt-dev libopus-dev libplacebo-dev libpocketsphinx-dev librabbitmq-dev librav1e-dev librist-dev librubberband-dev librsvg2-dev libsctp-dev libshine-dev libsmbclient-dev libsnappy-dev libsoxr-dev libspeex-dev libsrt-gnutls-dev libssh-gcrypt-dev libsvtav1enc-dev libtesseract-dev libtheora-dev libtwolame-dev libva-dev libvdpau-dev libvidstab-dev libvo-amrwbenc-dev libvpx-dev libx264-dev libx265-dev libxcb-shape0-dev libxcb-xfixes0-dev libxvidcore-dev libzimg-dev libzmq3-dev libzvbi-dev texinfo nasm pkg-kde-tools cleancss doxygen node-less
+sudo apt-get install geany-plugins
+sudo apt-get install libmujs2-dev
+sudo apt-get install libmujs2
+sudo apt-get install libxpresent1
+sudo apt-get install liblua5.2-0
+sudo apt-get install libxpresent1
+sudo apt-get install libmujs2
+sudo apt-get install libsixel1
+sudo apt install libfreetype-dev fonts-freefont-ttf
+sudo apt install libwayland-egl1
+sudo apt install valgrind
+## SDK
+pip3 install PyGObject
+pip3 install -r requirements.txt
+pip3 install -r torch
+pip3 install torch torchvision
+```
+
+Note that NOT all of them are a requirement, and sometimes, the order of install are important to resolv conflits.
 
 
 ## MIPI Camera OV13855
