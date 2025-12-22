@@ -43,7 +43,7 @@ Table of Contents:
 
 For the experiments i will use an Orange Pi 6 Plus, 32 GB of ram, and dual camera with ov13855 sensor and Debian 12 with GNOME (wayland).
 
-I'll conduct some experiments with the camera1 and camera2 and the NPU as soon as cix-opencv deb package is available for the Orange Pi 6 Plus (CIX P1 SBC).
+I'll conduct some experiments with the camera1 and camera2 and the NPU ~~as soon as cix-opencv deb package is available for the Orange Pi 6 Plus (CIX P1 SBC)~~ atfer using upstream OpenCV.
 
 The kernel version for these experiments is kernel 6.1-cix ("stock" version) and, if i'm brave enough i will build and rerun the experiments with kernel 6.6.
 
@@ -544,12 +544,13 @@ distrib/bin/htop
 ### Add new available Meters (F2)
 
 * Add the new Meters: CPUx (1...12), Wlan0, Eth0 and Eth1
-* Mark in F2 -> Display Options -> [x] Detailed CPU Time (System/IO-Wait/Hard-IRQ/Soft-IRQSteal/Guest)
+* Mark in F2 -> Display Options -> [x] Detailed CPU Time (System/IO-Wait/Hard-IRQ/Soft-IRQ/Steal/Guest)
 * Change Colors if you use Gnome-terminal
   
 ## NPU
 
 The NPU experiments with the camera will be possible when cix-opencv deb package is available, it might have some Hardware acceleration.
+Update: Orangepi Xunlong has told me CIX has not modified cix-opencv and we can use upstream OpenCV. Install OpenCV or build the upstream OpenCV as usual.
 
 For the experiments i overclocked it to "performance" and in Debian Settings i selected **Performance**
 
@@ -662,4 +663,4 @@ It ran for more than 15 min but the MIPI-CSI cameras crashed the v4l2 isp, webca
 
 ## Acknowledgments
 
-3djelly for the NPU example and tips to build the necessary packages.
+3djelly for the NPU example and tips to build the necessary packages and xunlong updating some info.
