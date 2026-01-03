@@ -1,0 +1,99 @@
+diff --git a/test/testffmpeg.c b/test/testffmpeg.c
+index d0e1cc8..71ceb7d 100644
+--- a/test/testffmpeg.c
++++ b/test/testffmpeg.c
+@@ -380,8 +380,9 @@ static enum AVPixelFormat GetSupportedPixelFormat(AVCodecContext *s, const enum
+         for (p = pix_fmts; *p != AV_PIX_FMT_NONE; p++) {
+             SDL_Log("    %s", av_get_pix_fmt_name(*p));
+         }
++    } else {
++        SDL_Log("Supported pixel format:  %s", av_get_pix_fmt_name(*p));
+     }
+-
+     return *p;
+ }
+ 
+@@ -414,7 +415,7 @@ static AVCodecContext *OpenVideoStream(AVFormatContext *ic, int stream, const AV
+     i = 0;
+     while (!context->hw_device_ctx &&
+            (config = avcodec_get_hw_config(codec, i++)) != NULL) {
+-#if 0
++#if 1
+         SDL_Log("Found %s hardware acceleration with pixel format %s", av_hwdevice_get_type_name(config->device_type), av_get_pix_fmt_name(config->pix_fmt));
+ #endif
+ 
+@@ -1289,6 +1290,22 @@ static void print_usage(SDLTest_CommonState *state, const char *argv0)
+     SDLTest_CommonLogUsage(state, argv0, options);
+ }
+ 
++static bool is_realtime(const char *file)
++{
++    if(!strncmp(file, "rtsp:", 5) || !strncmp(file, "rtmp:", 5))  {
++       return true;
++    }
++    return false;
++}
++
++static int is_realtime_rtmp(const char *file)
++{
++    if(!strncmp(file, "rtmp:", 5))  {
++       return true;
++    }
++    return false;
++}
++
+ int main(int argc, char *argv[])
+ {
+     const char *file = NULL;
+@@ -1301,6 +1318,7 @@ int main(int argc, char *argv[])
+     const AVCodec *video_codec = NULL;
+     AVCodecContext *audio_context = NULL;
+     AVCodecContext *video_context = NULL;
++    AVDictionary *opts = NULL;
+     AVPacket *pkt = NULL;
+     AVFrame *frame = NULL;
+     double first_pts = -1.0;
+@@ -1312,6 +1330,7 @@ int main(int argc, char *argv[])
+     bool decoded = false;
+     bool done = false;
+     SDLTest_CommonState *state;
++    bool realtime, realtime_rtmp;
+ 
+     /* Initialize test framework */
+     state = SDLTest_CommonCreateState(argv, 0);
+@@ -1406,9 +1425,33 @@ int main(int argc, char *argv[])
+     }
+ 
+     /* Open the media file */
+-    result = avformat_open_input(&ic, file, NULL, NULL);
++    realtime = is_realtime(file);
++    if (realtime) {
++        av_dict_set(&opts, "rtsp_flags", "prefer_tcp", 0);
++        av_dict_set(&opts, "num_capture_buffers", "128", 0);
++        av_dict_set(&opts, "probesize", "120000", 0);
++        av_dict_set(&opts, "max_delay", "5000000", 0);
++        av_dict_set(&opts, "reorder_queue_size", "2048", 0);
++    }
++    /* reduce latency on RTMP */
++    realtime_rtmp = is_realtime_rtmp(file);
++    if (realtime_rtmp) {
++        // av_dict_set(&opts, "fflags", "nobuffer", 0);
++        av_dict_set(&opts, "num_capture_buffers", "64", 0);
++        av_dict_set(&opts, "probesize", "120000", 0);
++    }
++    /* Open the media file */
++    result = avformat_open_input(&ic, file, NULL, &opts);
+     if (result < 0) {
+-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't open %s: %d", argv[1], result);
++        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't open %s: %d", file, result);
++        return_code = 4;
++        goto quit;
++    }
++    if (realtime || realtime_rtmp) {
++        av_dict_free(&opts);
++    }
++    if (avformat_find_stream_info(ic, NULL) < 0) {
++        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Cannot find input stream information for %s", file);
+         return_code = 4;
+         goto quit;
+     }
