@@ -36,6 +36,7 @@ Table of Contents:
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
   - [Multiple cameras with NPU](#multiple-cameras-with-npu)
+- [FFmpeg vs GStreamer](#ffmpeg-vs-gstreamer)
 - [Issues](#issues)
 - [Acknowledgments](#acknowledgments)
 
@@ -651,6 +652,81 @@ Multiple cameras stress test:
 It ran for more than 15 min but the MIPI-CSI cameras crashed the v4l2 isp, webcam was still running.
 ![2 MIPI-CSI 1920x1080 and 2 Webcam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/cam1_1920x1080_cam2_1920x1080_cam3_640x480_cam4_640_480.jpg)
 
+
+## FFmpeg vs GStreamer
+
+Which one is the best option, FFmpeg or GStreamer?
+
+For this experiment and to try to reach some concrete conclusion, we will use a file in mp4 format, with av1 10-bit codec and 1920x1080 resolution, 
+and see which one is able to decode and display this on the screen.
+
+Download the av1 10-bit file:
+
+	mkdir -p test_videos #create a test_videos dir if not created
+	cd test_videos
+	wget http://download.opencontent.netflix.com.s3.amazonaws.com/AV1/Sparks/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4
+	ffprobe /home/orangepi/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4 
+	ffprobe version 5.1.6-0+deb12u1+cix.2503.radxa Copyright (c) 2007-2024 the FFmpeg developers
+	  built with gcc 12 (Debian 12.2.0-14)
+	  configuration: --prefix=/usr --extra-version=0+deb12u1+cix.2503.radxa --toolchain=hardened --libdir=/usr/lib/aarch64-linux-gnu --incdir=/usr/include/aarch64-linux-gnu --arch=arm64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libglslang --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librist --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --disable-sndio --enable-libjxl --enable-pocketsphinx --enable-librsvg --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-libplacebo --enable-librav1e --cross-prefix=aarch64-linux-gnu- --target-os=linux --enable-shared
+	  libavutil      57. 28.100 / 57. 28.100
+	  libavcodec     59. 37.100 / 59. 37.100
+	  libavformat    59. 27.100 / 59. 27.100
+	  libavdevice    59.  7.100 / 59.  7.100
+	  libavfilter     8. 44.100 /  8. 44.100
+	  libswscale      6.  7.100 /  6.  7.100
+	  libswresample   4.  7.100 /  4.  7.100
+	  libpostproc    56.  6.100 / 56.  6.100
+	[libdav1d @ 0xaaaaafbacea0] libdav1d 1.0.0
+	Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/orangepi/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4':
+	  Metadata:
+	    major_brand     : iso4
+	    minor_version   : 1
+	    compatible_brands: iso4av01
+	    creation_time   : 2022-06-09T03:25:48.000000Z
+	    encoder         : GPAC-2.1-DEV-rev199-g8e29f6e8b-github_master
+	  Duration: 00:09:11.00, start: 0.000000, bitrate: 915 kb/s
+	  Stream #0:0[0x1](und): Video: av1 (Main) (av01 / 0x31307661), yuv420p10le(tv), 1920x1080, 914 kb/s, 25 fps, 25 tbr, 25k tbn (default)
+	    Metadata:
+	      creation_time   : 2022-06-09T03:25:48.000000Z
+	      handler_name    : obu@GPAC2.1-DEV-rev199-g8e29f6e8b-github_master
+	      vendor_id       : [0][0][0][0]
+
+
+## ffplay
+
+ffplay is a simple media player built using the FFmpeg and the SDL2.
+
+ffplay in use here is the one that came pre-installed:
+
+	orangepi@orangepi6plus:~/cix/ffmpeg/ffmpeg-cix$ ffplay -loop 0 -i -vcodec av1_v4l2m2m ~/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4
+
+![ffplay pre installed](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/ffplay_pre-installed.jpg)
+
+**CPU load: ~95%**
+
+![ffplay cpu load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/ffplay_cpu_load.jpg)
+
+ffplay in use now is the built nativelly:
+
+	orangepi@orangepi6plus:~/cix/ffmpeg/ffmpeg-cix$ ffplay -loop 0 -i -vcodec av1_v4l2m2m ~/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4
+
+![ffplay custom](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/ffplay_custom.jpg)
+
+**CPU load: ~9%**
+
+![ffplay custom cpu load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/ffplay_custom_cpu_load.jpg)
+
+
+## gstreamer
+
+gstreamer tested here is the pre-installed one, and was not able to display the stream, only a green screen:
+
+	orangepi@orangepi6plus:~/cix/ffmpeg/ffmpeg-cix$ gst-launch-1.0 filesrc location=/home/orangepi/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4  ! decodebin ! glupload ! glcolorconvert ! glcolorbalance ! glimagesink
+
+![gtsreamer](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/gstreamer.jpg)	
+
+**CPU load: ~6%**
 
 
 ## Issues
