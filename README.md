@@ -709,7 +709,7 @@ ffplay in use here is the one that came pre-installed:
 
 ffplay in use now is the built nativelly:
 
-	orangepi@orangepi6plus:~/cix/ffmpeg/ffmpeg-cix$ ffplay -loop 0 -i -vcodec av1_v4l2m2m ~/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4
+	orangepi@orangepi6plus:~/cix/ffmpeg/ffmpeg-cix$ ./ffplay -loop 0 -i -vcodec av1_v4l2m2m ~/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4
 
 ![ffplay custom](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/ffplay_custom.jpg)
 
