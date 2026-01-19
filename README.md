@@ -36,7 +36,7 @@ Table of Contents:
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
   - [Multiple cameras with NPU](#multiple-cameras-with-npu)
-- [FFmpeg vs GStreamer](#ffmpeg-vs-gstreamer)
+- [FFmpeg vs GStreamer vs mpv](#ffmpeg-vs-gstreamer-mpv)
 - [Issues](#issues)
 - [Acknowledgments](#acknowledgments)
 
@@ -653,9 +653,9 @@ It ran for more than 15 min but the MIPI-CSI cameras crashed the v4l2 isp, webca
 ![2 MIPI-CSI 1920x1080 and 2 Webcam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/cam1_1920x1080_cam2_1920x1080_cam3_640x480_cam4_640_480.jpg)
 
 
-## FFmpeg vs GStreamer
+## FFmpeg vs GStreamer vs mpv
 
-Which one is the best option, FFmpeg or GStreamer?
+Which is the best option for media player, FFmpeg or GStreamer or MPV?
 
 For this experiment and to try to reach some concrete conclusion, we will use a file in mp4 format, with av1 10-bit codec and 1920x1080 resolution, 
 and see which one is able to decode and display this on the screen.
@@ -745,6 +745,15 @@ gstreamer tested here is the pre-installed one, and was not able to display the 
 ![gtsreamer](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/gstreamer.jpg)	
 
 **CPU load: ~6%**
+
+## mpv
+
+**mpv** is a de-facto media player for linux and it can handle the P010 (HDR) and render it beautifully.
+
+It seems it is the best choice for high-end videos.
+![mpv media player](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/mpv.jpg)	
+
+**CPU load: ~7%**
 
 
 ## Issues
