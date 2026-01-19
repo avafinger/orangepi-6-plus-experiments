@@ -36,7 +36,7 @@ Table of Contents:
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
   - [Multiple cameras with NPU](#multiple-cameras-with-npu)
-- [FFmpeg vs GStreamer vs mpv](#ffmpeg-vs-gstreamer-vs-mpv)
+- [FFmpeg vs GStreamer vs mpv vs testffmpeg](#ffmpeg-vs-gstreamer-vs-mpv-vs-testffmpeg)
 - [Issues](#issues)
 - [Acknowledgments](#acknowledgments)
 
@@ -653,9 +653,9 @@ It ran for more than 15 min but the MIPI-CSI cameras crashed the v4l2 isp, webca
 ![2 MIPI-CSI 1920x1080 and 2 Webcam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/cam1_1920x1080_cam2_1920x1080_cam3_640x480_cam4_640_480.jpg)
 
 
-## FFmpeg vs GStreamer vs mpv
+## FFmpeg vs GStreamer vs mpv vs testffmpeg
 
-Which is the best option for media player, FFmpeg or GStreamer or MPV?
+Which is the best option for media player, **FFmpeg** or **GStreamer** or **MPV** or **testffmpeg**?
 
 For this experiment and to try to reach some concrete conclusion, we will use a file in mp4 format, with av1 10-bit codec and 1920x1080 resolution, 
 and see which one is able to decode and display this on the screen.
@@ -700,7 +700,7 @@ Check the content:
 	      vendor_id       : [0][0][0][0]
 
 
-## ffplay
+### ffplay
 
 ffplay is a simple media player built using the FFmpeg and the SDL2.
 
@@ -736,7 +736,7 @@ I don't know why, since the ffmpeg compiled for other platforms and the one comp
 Additional info:
 kernel: https://docs.kernel.org/userspace-api/media/v4l/pixfmt-yuv-planar.html#p010-and-tiled-p010
 
-## gstreamer
+### gstreamer
 
 gstreamer tested here is the pre-installed one, and was not able to display the stream, only a green screen:
 
@@ -746,7 +746,7 @@ gstreamer tested here is the pre-installed one, and was not able to display the 
 
 **CPU load: ~6%**
 
-## mpv
+### mpv
 
 **mpv** is a de-facto media player for linux and it can handle the P010 (HDR) and render it beautifully.
 
@@ -764,6 +764,20 @@ It seems it is the best choice for high-end videos.
 
 **CPU load: ~7%**
 
+### testffmpeg
+
+**testffmpeg** can't handle pixel format P010 but compiling **testffmpeg** with NV12 support and Linking it with **ffmpeg** built natively on board can handle AV1 10-bit videos with high eficiency.
+
+Compared to **mpv** , **testffmpeg** (**SDL3**) has better performance but consuming more memory.
+
+**command:**
+
+	./testffmpeg --video-codec av1_v4l2m2m /home/orangepi/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4
+
+![mpv media player](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/testffmpeg_sdl3.jpg)
+
+
+**CPU load: ~6%**
 
 ## Issues
 
