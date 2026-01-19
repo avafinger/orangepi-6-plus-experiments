@@ -36,7 +36,7 @@ Table of Contents:
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
   - [Multiple cameras with NPU](#multiple-cameras-with-npu)
-- [FFmpeg vs GStreamer vs mpv](#ffmpeg-vs-gstreamer-mpv)
+- [FFmpeg vs GStreamer vs mpv](#ffmpeg-vs-gstreamer-vs-mpv)
 - [Issues](#issues)
 - [Acknowledgments](#acknowledgments)
 
@@ -751,6 +751,15 @@ gstreamer tested here is the pre-installed one, and was not able to display the 
 **mpv** is a de-facto media player for linux and it can handle the P010 (HDR) and render it beautifully.
 
 It seems it is the best choice for high-end videos.
+
+**command:**
+
+	mpv -hwdec=v4l2m2m-copy /home/orangepi/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4 
+	 (+) Video --vid=1 (*) (av1 1920x1080 25.000fps)
+	Using hardware decoding (v4l2m2m-copy).
+	VO: [gpu] 1920x1080 nv12
+	V: 00:02:45 / 00:09:11 (30%)
+
 ![mpv media player](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/mpv.jpg)	
 
 **CPU load: ~7%**
