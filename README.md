@@ -660,11 +660,18 @@ Which one is the best option, FFmpeg or GStreamer?
 For this experiment and to try to reach some concrete conclusion, we will use a file in mp4 format, with av1 10-bit codec and 1920x1080 resolution, 
 and see which one is able to decode and display this on the screen.
 
-Download the av1 10-bit file:
+Create test_videos directory if you haven't done it following the SDK:
 
+	cd ~
 	mkdir -p test_videos #create a test_videos dir if not created
 	cd test_videos
+	
+Download the av1 10-bit file:
+	
 	wget http://download.opencontent.netflix.com.s3.amazonaws.com/AV1/Sparks/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4
+
+Check the content:
+	
 	ffprobe /home/orangepi/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4 
 	ffprobe version 5.1.6-0+deb12u1+cix.2503.radxa Copyright (c) 2007-2024 the FFmpeg developers
 	  built with gcc 12 (Debian 12.2.0-14)
@@ -707,7 +714,7 @@ ffplay in use here is the one that came pre-installed:
 
 ![ffplay cpu load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/ffplay_cpu_load.jpg)
 
-ffplay in use now is the built nativelly:
+ffplay in use now is the compiled on board:
 
 	orangepi@orangepi6plus:~/cix/ffmpeg/ffmpeg-cix$ ./ffplay -loop 0 -i -vcodec av1_v4l2m2m ~/test_videos/Sparks-5994fps-AV1-10bit-1920x1080-2194kbps.mp4
 
@@ -717,6 +724,17 @@ ffplay in use now is the built nativelly:
 
 ![ffplay custom cpu load](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/ffplay_custom_cpu_load.jpg)
 
+**Possible explanation:**
+
+The pre-installed ffplay gets pixel format P010 and the one compiled on board gets pixel format NV12, P010 (HDR) carries 25% more information and 
+SDL2 might need to convert to NV12/YUV to display it on screen, this convertion is done most likely by software.
+
+The ffplay compiled on board seems to get NV12 (directly) , saving CPU.
+
+I don't know why, since the ffmpeg compiled for other platforms and the one compiled on the board should be the same.
+
+Additional info:
+kernel: https://docs.kernel.org/userspace-api/media/v4l/pixfmt-yuv-planar.html#p010-and-tiled-p010
 
 ## gstreamer
 
