@@ -776,8 +776,20 @@ Compared to **mpv** , **testffmpeg** (**SDL3**) has better performance but consu
 
 ![mpv media player](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/testffmpeg_sdl3.jpg)
 
+**CPU load: 6%**
 
-**CPU load: ~6%**
+### testffmpeg + EGL + DRM_PRIME
+
+This experiment uses FFmpeg 8.0 with the DRM_PRIME patch, although it was designed to work with Kodi.
+
+Performance is great, but there are still some memory leak issues, whether in FFmpeg, SDL3, or testffmpeg.
+
+The FFmpeg version used is this one: [https://github.com/Sky1-Linux/ffmpeg-sky1], with drm_prime support recently added.
+
+![mpv media player](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/testffmpeg_drm_prime.jpg)
+
+
+**CPU load: 3~6%**
 
 ## Issues
 
