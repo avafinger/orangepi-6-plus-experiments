@@ -782,7 +782,8 @@ Compared to **mpv** , **testffmpeg** (**SDL3**) has better performance but consu
 
 This experiment uses FFmpeg 8.0 with the DRM_PRIME patch, although it was designed to work with Kodi.
 
-The performance is great, but there are still some memory leak issues to be resolved, perhaps in SDL3 or even in testffmpeg itself..
+The performance is great. ~but there are still some memory leak issues to be resolved, perhaps in SDL3 or even in testffmpeg itself..~
+The fix has been pushed: https://github.com/libsdl-org/SDL/issues/14908#issuecomment-3811781974
 
 The FFmpeg version used is this one: [https://github.com/Sky1-Linux/ffmpeg-sky1], with drm_prime support recently added.
 
