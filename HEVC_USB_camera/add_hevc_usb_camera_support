@@ -1,0 +1,14 @@
+diff --git a/libavdevice/v4l2-common.c b/libavdevice/v4l2-common.c
+index ebfd2b6..4e40ae0 100644
+--- a/libavdevice/v4l2-common.c
++++ b/libavdevice/v4l2-common.c
+@@ -61,6 +61,9 @@ const struct fmt_map ff_fmt_conversion_table[] = {
+ #ifdef V4L2_PIX_FMT_H264
+     { AV_PIX_FMT_NONE,    AV_CODEC_ID_H264,     V4L2_PIX_FMT_H264    },
+ #endif
++#ifdef V4L2_PIX_FMT_HEVC
++    { AV_PIX_FMT_NONE,    AV_CODEC_ID_HEVC,     V4L2_PIX_FMT_HEVC    },
++#endif
+ #ifdef V4L2_PIX_FMT_MPEG4
+     { AV_PIX_FMT_NONE,    AV_CODEC_ID_MPEG4,    V4L2_PIX_FMT_MPEG4   },
+ #endif
