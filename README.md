@@ -37,6 +37,7 @@ Table of Contents:
   - [Camera with NPU](#camera-with-npu)
   - [Multiple cameras with NPU](#multiple-cameras-with-npu)
 - [FFmpeg vs GStreamer vs mpv vs testffmpeg](#ffmpeg-vs-gstreamer-vs-mpv-vs-testffmpeg)
+- [USB camera H264/H265](#usb-camera-h264h265)
 - [Issues](#issues)
 - [Acknowledgments](#acknowledgments)
 
@@ -791,6 +792,58 @@ The FFmpeg version used is this one: [https://github.com/Sky1-Linux/ffmpeg-sky1]
 
 
 **CPU load: 3~6%**
+
+# USB Camera H264/H265
+
+This experiment is using a H264 / H265 USB 2.0 camera.
+
+A H264 usb camera is attached to USB, and is available at video node /dev/video8. a H265 USB camera is attached to a USB3 and the video node is /dev/video10 as below.
+
+## USB H264
+
+	v4l2-ctl --device=/dev/video8 --get-fmt-video
+	Format Video Capture:
+		Width/Height      : 1920/1080
+		Pixel Format      : 'H264' (H.264)
+		Field             : None
+		Bytes per Line    : 3840
+		Size Image        : 4147200
+		Colorspace        : sRGB
+		Transfer Function : Rec. 709
+		YCbCr/HSV Encoding: ITU-R 601
+		Quantization      : Default (maps to Full Range)
+		Flags             : 
+
+
+Display the camera content using ffplay, with litle latency, 100~150 ms:	
+
+	ffplay -f v4l2 -pixel_format h264 -vcodec h264_v4l2m2m -fflags nobuffer -vf "drawtext=fontfile=/usr/share/fonts/truetype/freefont/FreeMono.ttf: text='%{pts}': x=0: y=0: fontcolor=white: box=1: boxcolor=black@0.5: fontsize=24" /dev/video8
+
+
+Gstreamer can't handle the colorimetry for this device.
+
+
+## USB H265 (HEVC)
+
+	v4l2-ctl --device=/dev/video10 --get-fmt-video
+	Format Video Capture:
+		Width/Height      : 1920/1080
+		Pixel Format      : 'HEVC' (HEVC)
+		Field             : None
+		Bytes per Line    : 0
+		Size Image        : 4147200
+		Colorspace        : sRGB
+		Transfer Function : Rec. 709
+		YCbCr/HSV Encoding: ITU-R 601
+		Quantization      : Default (maps to Full Range)
+		Flags             : 
+
+Gstreamer can't handle the required colorimetry for this device, so we use ffmpeg for that, but we need a patch for HEVC. Patch is attached.
+
+Display the camera content using ffplay and the patch, with litle latency, around 100 ms:
+
+	ffplay -f v4l2 -pixel_format hevc -vcodec hevc_v4l2m2m -fflags nobuffer /dev/video10
+
 
 ## Issues
 
