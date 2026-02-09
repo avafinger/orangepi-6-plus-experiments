@@ -853,6 +853,22 @@ USB cam h264 connected to USB2 and USB cam H265 connected to USB3 in parallel to
 
 ![H264 Cam 1920x1080 vs H265 cam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/usb_h264_h265.jpg)
 
+**Display FPS using the filter. Patch attached.**
+
+Type in the command:
+
+1. H265 usb cam
+
+		ffplay -f v4l2 -pixel_format hevc -vcodec hevc_v4l2m2m -fflags nobuffer -vf "drawtext=fontfile=/usr/share/fonts/truetype/freefont/FreeMono.ttf: text='%{fps},%{frame_num}': x=0: y=0: fontcolor=white: box=1: boxcolor=black@0.5: fontsize=52" -i /dev/video10
+
+2. H264 usb cam
+
+		ffplay -f v4l2 -pixel_format h264 -vcodec h264_v4l2m2m -fflags nobuffer -vf "drawtext=fontfile=/usr/share/fonts/truetype/freefont/FreeMono.ttf: text='%{fps},%{frame_num}': x=0: y=0: fontcolor=white: box=1: boxcolor=black@0.5: fontsize=52" -i /dev/video8
+
+Output of the cameras on desktop:
+
+![fps using filter](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/fps.jpg)
+
 ## Issues
 
 - Once you issue a wrong command, the kernel may crash, or a reboot is needed.
