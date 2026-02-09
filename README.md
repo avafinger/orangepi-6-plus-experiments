@@ -9,6 +9,8 @@ Soc | Board | Distro | Memory size | Kernel version | Camera | sensor | Max. win
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera2 | ov13855 | 1920x1080 | 30 fps
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera3 | webcam 720p | 640x480 | 30 fps
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera4 | webcam  | 640x480 | 30 fps
+| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera5 | usb H264  | 1920x1080 | 30 fps
+| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera6 | usb H265  | 2560x1440 | 30 fps
 
 Table of Contents:
 
@@ -797,7 +799,7 @@ The FFmpeg version used is this one: [https://github.com/Sky1-Linux/ffmpeg-sky1]
 
 This experiment is using a H264 / H265 USB 2.0 camera.
 
-A H264 usb camera is attached to USB, and is available at video node /dev/video8. a H265 USB camera is attached to a USB3 and the video node is /dev/video10 as below.
+The H264 usb camera is attached to USB, and is available at video node /dev/video8. a H265 USB camera is attached to a USB3 and the video node is /dev/video10 as below.
 
 ## USB H264
 
@@ -815,7 +817,7 @@ A H264 usb camera is attached to USB, and is available at video node /dev/video8
 		Flags             : 
 
 
-Display the camera content using ffplay, with litle latency, 100~150 ms:	
+Display the camera content using ffplay, with little latency, 100~150 ms:	
 
 	ffplay -f v4l2 -pixel_format h264 -vcodec h264_v4l2m2m -fflags nobuffer -vf "drawtext=fontfile=/usr/share/fonts/truetype/freefont/FreeMono.ttf: text='%{pts}': x=0: y=0: fontcolor=white: box=1: boxcolor=black@0.5: fontsize=24" /dev/video8
 
@@ -844,6 +846,12 @@ Display the camera content using ffplay and the patch, with litle latency, aroun
 
 	ffplay -f v4l2 -pixel_format hevc -vcodec hevc_v4l2m2m -fflags nobuffer /dev/video10
 
+
+**USB camera h264 vs h265**
+
+USB cam h264 connected to USB2 and USB cam H265 connected to USB3 in parallel to check for latency:
+
+![H264 Cam 1920x1080 vs H265 cam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/usb_h264_h265.jpg)
 
 ## Issues
 
