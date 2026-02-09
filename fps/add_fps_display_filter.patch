@@ -1,0 +1,126 @@
+diff --git a/libavfilter/avfilter.c b/libavfilter/avfilter.c
+index 965f5d0..a393f39 100644
+--- a/libavfilter/avfilter.c
++++ b/libavfilter/avfilter.c
+@@ -43,6 +43,13 @@
+ #include "framepool.h"
+ #include "internal.h"
+ 
++#include <time.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <sys/time.h>
++#include <sys/mman.h>
++
++
+ static void tlog_ref(void *ctx, AVFrame *ref, int end)
+ {
+     ff_tlog(ctx,
+@@ -965,6 +972,18 @@ static int default_filter_frame(AVFilterLink *link, AVFrame *frame)
+     return ff_filter_frame(link->dst->outputs[0], frame);
+ }
+ 
++static int64_t get_wall_time(void)
++{
++    int64_t ms;
++    struct timespec spec;
++
++    clock_gettime(CLOCK_MONOTONIC, &spec);
++    ms = spec.tv_sec * 1000 * 1000 + spec.tv_nsec / 1000;
++
++    return ms;
++}
++
++
+ static int ff_filter_frame_framed(AVFilterLink *link, AVFrame *frame)
+ {
+     int (*filter_frame)(AVFilterLink *, AVFrame *);
+@@ -1117,6 +1136,9 @@ static int ff_filter_frame_to_filter(AVFilterLink *link)
+     int ret;
+ 
+     av_assert1(ff_framequeue_queued_frames(&link->fifo));
++    if (!link->frame_count_out) {
++		link->before = get_wall_time();
++	}
+     ret = link->min_samples ?
+           ff_inlink_consume_samples(link, link->min_samples, link->max_samples, &frame) :
+           ff_inlink_consume_frame(link, &frame);
+@@ -1128,6 +1150,15 @@ static int ff_filter_frame_to_filter(AVFilterLink *link)
+     /* The filter will soon have received a new frame, that may allow it to
+        produce one or more: unblock its outputs. */
+     filter_unblock(dst);
++
++    /* Calc FPS from filter output */
++    if (!(link->frame_count_out % 30)) {
++        link->after = get_wall_time();
++        link->msecs = (link->after - link->before);
++        link->fps = ((int64_t) link->frame_count_out * 1000 * 1000) / link->msecs;
++        link->fps_d = ((int64_t) ((int64_t) link->frame_count_out * 100 * 1000 * 1000 / link->msecs)) % 100;
++    }
++
+     /* AVFilterPad.filter_frame() expect frame_count_out to have the value
+        before the frame; ff_filter_frame_framed() will re-increment it. */
+     link->frame_count_out--;
+diff --git a/libavfilter/avfilter.h b/libavfilter/avfilter.h
+index 2e8197c..53ee168 100644
+--- a/libavfilter/avfilter.h
++++ b/libavfilter/avfilter.h
+@@ -657,6 +657,11 @@ struct AVFilterLink {
+      */
+     int64_t sample_count_in, sample_count_out;
+ 
++    /**
++     * FPS through the link.
++     */
++    int64_t after, before, msecs, fps, fps_d;
++
+     /**
+      * A pointer to a FFFramePool struct.
+      */
+diff --git a/libavfilter/vf_drawtext.c b/libavfilter/vf_drawtext.c
+index feb6898..5b56418 100644
+--- a/libavfilter/vf_drawtext.c
++++ b/libavfilter/vf_drawtext.c
+@@ -133,6 +133,8 @@ enum var_name {
+     VAR_PKT_POS,
+     VAR_PKT_DURATION,
+     VAR_PKT_SIZE,
++    VAR_FPS,
++    VAR_FPS_D,
+     VAR_VARS_NB
+ };
+ 
+@@ -1029,6 +1031,15 @@ static int func_frame_num(AVFilterContext *ctx, AVBPrint *bp,
+     return 0;
+ }
+ 
++static int func_fps(AVFilterContext *ctx, AVBPrint *bp,
++                          char *fct, unsigned argc, char **argv, int tag)
++{
++    DrawTextContext *s = ctx->priv;
++
++    av_bprintf(bp, "fps:%3lu.%02lu", (int64_t)s->var_values[VAR_FPS], (int64_t)s->var_values[VAR_FPS_D]);
++    return 0;
++}
++
+ static int func_metadata(AVFilterContext *ctx, AVBPrint *bp,
+                          char *fct, unsigned argc, char **argv, int tag)
+ {
+@@ -1220,6 +1231,7 @@ static const struct drawtext_function {
+     { "frame_num", 0, 0, 0,   func_frame_num },
+     { "n",         0, 0, 0,   func_frame_num },
+     { "metadata",  1, 2, 0,   func_metadata },
++    { "fps",       0, 0, 0,   func_fps },
+ };
+ 
+ static int eval_function(AVFilterContext *ctx, AVBPrint *bp, char *fct,
+@@ -1643,6 +1655,9 @@ static int filter_frame(AVFilterLink *inlink, AVFrame *frame)
+ #endif
+     }
+ 
++    s->var_values[VAR_FPS] = inlink->fps;
++    s->var_values[VAR_FPS_D] = inlink->fps_d;
++
+     s->var_values[VAR_N] = inlink->frame_count_out + s->start_number;
+     s->var_values[VAR_T] = frame->pts == AV_NOPTS_VALUE ?
+         NAN : frame->pts * av_q2d(inlink->time_base);
