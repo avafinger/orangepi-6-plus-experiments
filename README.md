@@ -38,10 +38,12 @@ Table of Contents:
 - [NPU](#npu)
   - [Camera with NPU](#camera-with-npu)
   - [Multiple cameras with NPU](#multiple-cameras-with-npu)
+  - [Real-time inference C++ vs Python3](#real-time-inference-c-vs-python3)
 - [FFmpeg vs GStreamer vs mpv vs testffmpeg](#ffmpeg-vs-gstreamer-vs-mpv-vs-testffmpeg)
 - [USB camera H264/H265](#usb-camera-h264h265)
+- [References](#references)
 - [Issues](#issues)
-- [Acknowledgments](#acknowledgments)
+
 
 ## Introduction
 
@@ -655,6 +657,14 @@ Multiple cameras stress test:
 It ran for more than 15 min but the MIPI-CSI cameras crashed the v4l2 isp, webcam was still running.
 ![2 MIPI-CSI 1920x1080 and 2 Webcam](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/cam1_1920x1080_cam2_1920x1080_cam3_640x480_cam4_640_480.jpg)
 
+## Real-time inference C++ vs Python3
+
+In this experiment, we analyze Python vs C++ to see how the results of NPU + mp4 compare.
+
+* The python3 uses OpenCV + software decoding the mp4 file + QT window output + yolox_l NPU model.
+* The C++ version uses FFmpeg + hardware decoding the mp4 file + wayland output + yolov8n.cix NPU model.
+
+***to be completed***
 
 ## FFmpeg vs GStreamer vs mpv vs testffmpeg
 
@@ -846,7 +856,6 @@ Display the camera content using ffplay and the patch, with litle latency, aroun
 
 	ffplay -f v4l2 -pixel_format hevc -vcodec hevc_v4l2m2m -fflags nobuffer /dev/video10
 
-
 **USB camera h264 vs h265**
 
 USB cam h264 connected to USB2 and USB cam H265 connected to USB3 in parallel to check for latency:
@@ -857,7 +866,7 @@ USB cam h264 connected to USB2 and USB cam H265 connected to USB3 in parallel to
 
 Type in the command:
 
-1. H265 usb cam
+1. H265 usb cam (requires NV12 support)
 
 		ffplay -f v4l2 -pixel_format hevc -vcodec hevc_v4l2m2m -fflags nobuffer -vf "drawtext=fontfile=/usr/share/fonts/truetype/freefont/FreeMono.ttf: text='%{fps},%{frame_num}': x=0: y=0: fontcolor=white: box=1: boxcolor=black@0.5: fontsize=52" -i /dev/video10
 
@@ -869,14 +878,21 @@ Output of the cameras on desktop:
 
 ![fps using filter](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/fps.jpg)
 
+## References
+
+* FFMpeg + DRM_PRIME (https://github.com/royka1/ffmpeg-sky1/) - thanks to @royka1
+* FFMpeg  (https://gitlab.com/cix-linux/ffmpeg_repo/ffmpeg) - thanks to Radxa
+* NPU C++ (https://github.com/swdee/orion-o6-npu-yolov8/) - thanks to @swdee
+* yolox_l.cix example from CIX SDK  and yolon8n.cix taken from CIX SDK
+* updated info about opencv (https://github.com/orangepi-xunlong/component_cix-current/issues/1#issuecomment-3682176991) - thanks to xunlong
+
 ## Issues
 
 - Once you issue a wrong command, the kernel may crash, or a reboot is needed.
 - Camera2 seems to be in preview mode
 - Camera2 has some tearings, most likely a DMA buf issue
-- Cameras are capped at 1920x1080
+- MIPI Cameras are capped at 1920x1080
 - When streaming both Camera1 and Camera2 at the same time, the latency is noticeable (My Intel Box is ancient)
+- Using NPU and VPU (H265) triggers some decoding errors 
 
-## Acknowledgments
 
-3djelly for the NPU example and tips to build the necessary packages and xunlong updating some info.
