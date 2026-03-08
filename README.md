@@ -661,8 +661,19 @@ It ran for more than 15 min but the MIPI-CSI cameras crashed the v4l2 isp, webca
 
 In this experiment, we analyze Python vs C++ to see how the results of NPU + mp4 compare.
 
-* The python3 uses OpenCV + software decoding the mp4 file + QT window output + yolox_l NPU model.
-* The C++ version uses FFmpeg + hardware decoding the mp4 file + wayland output + yolov8n.cix NPU model.
+* The python3 uses OpenCV + software decoding the mp4 file + QT window output + yolox_l.cix model.
+
+  Here is the output of the python3 + software decoding the 4K mp4 and then outputing it to xwayland, **performance** governor:
+  ![Python3 + software decoder + QT xwayland](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/python3_opencv_yolox_l_3840x2160_performance.jpg)
+  
+* The C++ version uses FFmpeg + hardware decoding the mp4 file + wayland output + yolov8n.cix model.
+  
+  Here is a simple diagram on how it was done:
+  ![FFmpeg + NPU + hw acceleration](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/npu.drawio.png)
+
+  Here is the output from 4K mp4 with '**performance**' governor:
+  ![FFmpeg + NPU + hw acceleration performance](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/ffmpeg_yolov8n_3840x2160_performance.jpg)
+
 
 ***to be completed***
 
