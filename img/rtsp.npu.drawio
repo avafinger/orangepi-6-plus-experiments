@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" version="29.6.1">
+  <diagram name="Page-1" id="sIoYqBlxEp8TOUsfxuhf">
+    <mxGraphModel dx="1417" dy="826" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="1">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-1" edge="1" parent="1" source="dKHPsiFt_wVRAocRsH5z-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dKHPsiFt_wVRAocRsH5z-4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-2" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Open RTSP device address" vertex="1">
+          <mxGeometry height="80" width="80" x="270" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-3" edge="1" parent="1" source="dKHPsiFt_wVRAocRsH5z-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dKHPsiFt_wVRAocRsH5z-14" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-4" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Get YU12 / decoded frame" vertex="1">
+          <mxGeometry height="80" width="80" x="270" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-5" edge="1" parent="1" source="dKHPsiFt_wVRAocRsH5z-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dKHPsiFt_wVRAocRsH5z-8" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-6" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffe6cc;strokeColor=#d79b00;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;Apply filters to create a 4-D image&amp;nbsp;suitable as input for a deep neural network&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="80" x="270" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-7" edge="1" parent="1" source="dKHPsiFt_wVRAocRsH5z-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dKHPsiFt_wVRAocRsH5z-10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-8" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Send it to NPU" vertex="1">
+          <mxGeometry height="80" width="80" x="380" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-9" edge="1" parent="1" source="dKHPsiFt_wVRAocRsH5z-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dKHPsiFt_wVRAocRsH5z-12" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-10" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Get the detected&amp;nbsp; objects&amp;nbsp;" vertex="1">
+          <mxGeometry height="80" width="80" x="380" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-11" edge="1" parent="1" source="dKHPsiFt_wVRAocRsH5z-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dKHPsiFt_wVRAocRsH5z-16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-12" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Draw original frame on screen using SDL3" vertex="1">
+          <mxGeometry height="80" width="80" x="380" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-13" edge="1" parent="1" source="dKHPsiFt_wVRAocRsH5z-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dKHPsiFt_wVRAocRsH5z-6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-14" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Resize it to 640x640 gray8-bit" vertex="1">
+          <mxGeometry height="80" width="80" x="270" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-15" edge="1" parent="1" source="dKHPsiFt_wVRAocRsH5z-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dKHPsiFt_wVRAocRsH5z-2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-16" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Draw the box for each detected object using SDL3" vertex="1">
+          <mxGeometry height="80" width="80" x="380" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-17" edge="1" parent="1" source="dKHPsiFt_wVRAocRsH5z-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dKHPsiFt_wVRAocRsH5z-2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dKHPsiFt_wVRAocRsH5z-18" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;FFmpeg&lt;/b&gt;" vertex="1">
+          <mxGeometry height="80" width="80" x="270" y="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
