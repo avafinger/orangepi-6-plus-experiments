@@ -669,7 +669,10 @@ In this experiment, we analyze Python vs C++ to see how the results of NPU + mp4
 * The C++ version uses FFmpeg + hardware decoding the mp4 file + wayland output + yolov8n.cix model.
   
   Here is a simple diagram on how it was done:
-  ![FFmpeg + NPU + hw acceleration](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/npu.drawio.png)
+  
+  ![FFmpeg + NPU + hw acceleration](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/npu.drawio-2.png)
+
+  ![FFmpeg + NPU + hw acceleration](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/npu.drawio-2.png)
 
   Here is the output from 4K mp4 with '**performance**' governor:
   ![FFmpeg + NPU + hw acceleration performance](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/ffmpeg_yolov8n_3840x2160_performance.jpg)
