@@ -11,7 +11,8 @@ Soc | Board | Distro | Memory size | Kernel version | Camera | type model | sens
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera4 | USB microsoft | webcam  | 640x480 | 30 fps
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera5 | USB H264 | GC2035 | 1920x1080 | 30 fps
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera6 | USB H265 | ? | 2560x1440 | 30 fps
-| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera6 | USB YUYV/MJPEG | GC2053 | 1920x1080 | 30 fps
+| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera7 | USB YUYV/MJPEG | GC2053 | 1920x1080 | 30 fps
+| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera8 | USB YUYV/MJPEG | IMX766 | 8160x6120 | 5 fps
 
 Table of Contents:
 
@@ -42,6 +43,7 @@ Table of Contents:
   - [Real-time inference C++ vs Python3](#real-time-inference-c-vs-python3)
 - [FFmpeg vs GStreamer vs mpv vs testffmpeg](#ffmpeg-vs-gstreamer-vs-mpv-vs-testffmpeg)
 - [USB camera H264/H265](#usb-camera-h264h265)
+- [USB camera MJPG](#usb-camera-mjpg)
 - [References](#references)
 - [Issues](#issues)
 
@@ -890,6 +892,517 @@ Type in the command:
 Output of the cameras on desktop:
 
 ![fps using filter](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/fps.jpg)
+
+# USB Camera MJPG
+
+USB cameras with MJPG (Motion-JPEG) are very common and cheaper than H265/H265.
+
+The problem with MJPG is that you need to decode it to use it in something useful like OpenCV, Motion, etc.
+Hardware-accelerated MJPG decoding can be done with GStreamer, and the current FFmpeg does not have a hardware MJPEG decoder available.
+It is worth noting that not all USB cameras with MJPEG output are the same, GStreamer has some problems with MJPEG information parsing / analysis.
+The MJPG usb camera is attached to USB3 and USB2 for some experiments and tests, and is available at video node /dev/videoX where X will be the node created (0,...,99)
+
+## USB Camera HD
+
+	orangepi@orangepi6plus:~$ v4l2-ctl --list-formats-ext -d /dev/video6
+	ioctl: VIDIOC_ENUM_FMT
+		Type: Video Capture
+	
+		[0]: 'MJPG' (Motion-JPEG, compressed)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 640x360
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 544x288
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 432x240
+				Interval: Discrete 0.017s (60.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 352x288
+				Interval: Discrete 0.017s (60.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 320x240
+				Interval: Discrete 0.017s (60.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 752x416
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 800x448
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 800x600
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 864x480
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 960x544
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 960x720
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 1024x576
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 1184x656
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+		[1]: 'YUYV' (YUYV 4:2:2)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 640x360
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 544x288
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 432x240
+				Interval: Discrete 0.017s (60.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 352x288
+				Interval: Discrete 0.017s (60.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 320x240
+				Interval: Discrete 0.017s (60.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 752x416
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 800x448
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 864x480
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 800x600
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 960x544
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 1024x576
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 960x720
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 1184x656
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+
+## USB Camera FHD
+
+	orangepi@orangepi6plus:~$ v4l2-ctl --list-formats-ext -d /dev/video8
+	ioctl: VIDIOC_ENUM_FMT
+		Type: Video Capture
+	
+		[0]: 'MJPG' (Motion-JPEG, compressed)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 160x120
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 320x240
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 800x600
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 1024x768
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 1280x1024
+				Interval: Discrete 0.033s (30.000 fps)
+		[1]: 'YUYV' (YUYV 4:2:2)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 160x120
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 320x240
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 800x600
+				Interval: Discrete 0.100s (10.000 fps)
+			Size: Discrete 1024x768
+				Interval: Discrete 0.100s (10.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.100s (10.000 fps)
+			Size: Discrete 1280x1024
+				Interval: Discrete 0.200s (5.000 fps)
+
+
+## USB Camera 2K
+
+	orangepi@orangepi6plus:~$ v4l2-ctl --list-formats-ext -d /dev/video10
+	ioctl: VIDIOC_ENUM_FMT
+		Type: Video Capture
+	
+		[0]: 'MJPG' (Motion-JPEG, compressed)
+			Size: Discrete 2560x1440
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x360
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1024x576
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 2560x1440
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+		[1]: 'YUYV' (YUYV 4:2:2)
+			Size: Discrete 320x240
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 480x272
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x368
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1024x576
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 320x240
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+		[2]: 'NV12' (Y/UV 4:2:0)
+			Size: Discrete 320x240
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x368
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1024x576
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.050s (20.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.100s (10.000 fps)
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 320x240
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+		[3]: 'H264' (H.264, compressed)
+			Size: Discrete 2560x1440
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x360
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1024x576
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 2560x1440
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+		[4]: 'HEVC' (HEVC, compressed)
+			Size: Discrete 2560x1440
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x360
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1024x576
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 2560x1440
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.040s (25.000 fps)
+				Interval: Discrete 0.067s (15.000 fps)
+
+
+## USB Camera 50M
+
+	v4l2-ctl --list-formats-ext -d /dev/video12
+	ioctl: VIDIOC_ENUM_FMT
+		Type: Video Capture
+	
+		[0]: 'MJPG' (Motion-JPEG, compressed)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 2048x1536
+				Interval: Discrete 0.067s (15.000 fps)
+			Size: Discrete 2592x1944
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 3840x2160
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 4000x3000
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 8160x6120
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 800x600
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 1024x768
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 1280x960
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 1600x1200
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 6000x6000
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 1024x576
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 768x432
+				Interval: Discrete 0.033s (30.000 fps)
+		[1]: 'YUYV' (YUYV 4:2:2)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.200s (5.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.100s (10.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+
+
+## Gstreamer pipeline Hacks
+
+Some cameras sends odd MJPEG sequence and you need to remove 'jpegparser' in order to read MJPEG frame correctly.
+
+	gst-launch-1.0 v4l2src device=/dev/video6 io-mode=dmabuf ! image/jpeg,format=MJPG,width=1280,height=720,framerate=30/1 ! jpegparse ! v4l2jpegdec ! glimagesink
+	gst-launch-1.0 v4l2src device=/dev/video6 io-mode=dmabuf ! image/jpeg,format=MJPG,width=4000,height=3000,framerate=30/1 ! jpegparse ! v4l2jpegdec ! glimagesink
+	gst-launch-1.0 v4l2src device=/dev/video10 io-mode=dmabuf ! image/jpeg,format=MJPG,width=1280,height=720,framerate=30/1 ! v4l2jpegdec ! glimagesink
+
+4000x3000 screenshot:
+
+![MJPG 4000x3000](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/usbcam_50M.jpg)
+
 
 ## References
 
