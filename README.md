@@ -7,8 +7,8 @@ Soc | Board | Distro | Memory size | Kernel version | Camera | type / model | se
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera1 | CSI ! ov13855 | 1920x1080 | 30 fps
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera2 | CSI ! ov13855 | 1920x1080 | 30 fps
-| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera3 | USB / HD 720P webcam! Novatek NT99141 | 1280x720 | 30 fps
-| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera4 | USB / microsoft ! webcam  | 640x480 | 30 fps
+| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera3 | USB HD 720P webcam! Novatek NT99141 | 1280x720 | 30 fps
+| CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera4 | USB microsoft ! webcam  | 640x480 | 30 fps
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera5 | USB H264 ! GC2035 | 1920x1080 | 30 fps
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera6 | USB H265 ! ? | 2560x1440 | 30 fps
 | CIX P1 | Orange Pi 6 Plus | Debian 12 | 32 GB | 6.1.44-cix  | camera6 | USB YUYV/MJPEG ! GC2053 | 1920x1080 | 30 fps
