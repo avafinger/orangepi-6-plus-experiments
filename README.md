@@ -918,9 +918,9 @@ Decoding the JPEG baseline with the VPU has parsing problems.
 	
 
 
-[162745.179450] [2026:04:30 21:36:28][pid:66158,cpu0,kworker/u24:13]MVX session: ffff00022f8b8138 Firmware rsp: Error. code=3, message=parse start of frame, chroma_format_idc.
-[162745.179543] [pid:67279,cpu6,v4l2_stateful_d]MVX session: ffff00022f8b8138 v4l2: Failed to stream on. dir=1.
-[162746.196890] [2026:04:30 21:36:29][pid:65860,cpu0,kworker/u24:5]MVX dev: Waiting scheduler idle timeout.
+	[162745.179450] [2026:04:30 21:36:28][pid:66158,cpu0,kworker/u24:13]MVX session: ffff00022f8b8138 Firmware rsp: Error. code=3, message=parse start of frame, chroma_format_idc.
+	[162745.179543] [pid:67279,cpu6,v4l2_stateful_d]MVX session: ffff00022f8b8138 v4l2: Failed to stream on. dir=1.
+	[162746.196890] [2026:04:30 21:36:29][pid:65860,cpu0,kworker/u24:5]MVX dev: Waiting scheduler idle timeout.
 
 
 ## USB Camera HD
