@@ -895,12 +895,32 @@ Output of the cameras on desktop:
 
 # USB Camera MJPG
 
-USB cameras with MJPG (Motion-JPEG) are very common and cheaper than H265/H265.
+USB cameras with MJPG (Motion-JPEG) are very common and cheaper than H264/H265.
 
 The problem with MJPG is that you need to decode it to use it in something useful like OpenCV, Motion, etc.
 Hardware-accelerated MJPG decoding can be done with GStreamer, and the current FFmpeg does not have a hardware MJPEG decoder available.
 It is worth noting that not all USB cameras with MJPEG output are the same, GStreamer has some problems with MJPEG information parsing / analysis.
 The MJPG usb camera is attached to USB3 and USB2 for some experiments and tests, and is available at video node /dev/videoX where X will be the node created (0,...,99)
+
+## JPEG baseline vs JPEG JFIF
+
+During the experiments i found the VPU jpeg hw decoder fails to decode JPEG baseline and needs to be reset somehow, waiting a bit has restored to previous state.
+Decoding the JPEG baseline with the VPU has parsing problems.
+
+**Decoded successfully:**
+
+	640x640.jpg: JPEG image data, baseline, precision 8, 640x640, components 3
+
+
+**Decoded failed:**
+
+	bus.jpg:     JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 640x640, components 3
+
+
+[162745.179450] [2026:04:30 21:36:28][pid:66158,cpu0,kworker/u24:13]MVX session: ffff00022f8b8138 Firmware rsp: Error. code=3, message=parse start of frame, chroma_format_idc.
+[162745.179543] [pid:67279,cpu6,v4l2_stateful_d]MVX session: ffff00022f8b8138 v4l2: Failed to stream on. dir=1.
+[162746.196890] [2026:04:30 21:36:29][pid:65860,cpu0,kworker/u24:5]MVX dev: Waiting scheduler idle timeout.
+
 
 ## USB Camera HD
 
@@ -1419,6 +1439,7 @@ Some cameras sends odd MJPEG sequence and you need to remove 'jpegparser' in ord
 - Camera2 has some tearings, most likely a DMA buf issue
 - MIPI Cameras are capped at 1920x1080
 - When streaming both Camera1 and Camera2 at the same time, the latency is noticeable (My Intel Box is ancient)
-- Using NPU and VPU (H265) triggers some decoding errors 
+- Using NPU and VPU (H265) triggers some decoding errors
+- VPU fails to decode jpeg baseline
 
 
