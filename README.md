@@ -909,12 +909,13 @@ Decoding the JPEG baseline with the VPU has parsing problems.
 
 **Decoded successfully:**
 
-	640x640.jpg: JPEG image data, baseline, precision 8, 640x640, components 3
+	bus.jpg:     JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 640x640, components 3
 
 
 **Decoded failed:**
 
-	bus.jpg:     JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 640x640, components 3
+	640x640.jpg: JPEG image data, baseline, precision 8, 640x640, components 3
+	
 
 
 [162745.179450] [2026:04:30 21:36:28][pid:66158,cpu0,kworker/u24:13]MVX session: ffff00022f8b8138 Firmware rsp: Error. code=3, message=parse start of frame, chroma_format_idc.
