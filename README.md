@@ -1424,6 +1424,11 @@ Some cameras sends odd MJPEG sequence and you need to remove 'jpegparser' in ord
 
 ![MJPG 4000x3000](https://raw.githubusercontent.com/avafinger/orangepi-6-plus-experiments/refs/heads/main/img/usbcam_50M.jpg)
 
+### Record H265 video and display the camera stream at the same time
+
+	gst-launch-1.0 v4l2src device=/dev/video6 ! image/jpeg,format=MJPG,width=1920,height=1080,framerate=30/1 ! jpegparse ! v4l2jpegdec ! video/x-raw,colorimetry=bt709 !  tee name=t t. ! queue ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls="encode,fixed_qp=28" ! video/x-h265,profile=main,level=\(string\)5 ! filesink location=video_camera1_1920x1080.hevc t. ! queue ! glimagesink
+
+
 
 ## References
 
