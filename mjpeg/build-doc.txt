@@ -1,0 +1,5 @@
+-- build
+gcc -o gst-mjpeg gst-mjpeg.c -I /usr/share/cix/include/gstreamer-1.0 $(pkg-config --cflags --libs glib-2.0 gobject-2.0) -lm -lpthread -L/usr/share/cix/lib -lgstreamer-1.0
+
+-- run
+./gst-mjpeg
