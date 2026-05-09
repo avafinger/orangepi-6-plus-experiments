@@ -1428,6 +1428,17 @@ Some cameras sends odd MJPEG sequence and you need to remove 'jpegparser' in ord
 
 	gst-launch-1.0 v4l2src device=/dev/video6 ! image/jpeg,format=MJPG,width=1920,height=1080,framerate=30/1 ! jpegparse ! v4l2jpegdec ! video/x-raw,colorimetry=bt709 !  tee name=t t. ! queue ! videoparse width=1920 height=1080 framerate=30/1 format=nv12 ! video/x-raw,colorimetry=bt709 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls="encode,fixed_qp=28" ! video/x-h265,profile=main,level=\(string\)5 ! filesink location=video_camera1_1920x1080.hevc t. ! queue ! glimagesink
 
+## Display a hw decoded jpeg on screen
+
+Samll program to check if the VPU can decode a jpg file and display it on screen:
+
+	-- build
+	cd mjpeg
+	gcc -o gst-mjpeg gst-mjpeg.c -I /usr/share/cix/include/gstreamer-1.0 $(pkg-config --cflags --libs glib-2.0 gobject-2.0) -lm -lpthread -L/usr/share/cix/lib -lgstreamer-1.0
+	
+	-- run
+	./gst-mjpeg test_image.jpg
+
 
 
 ## References
