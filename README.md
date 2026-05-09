@@ -1430,7 +1430,7 @@ Some cameras sends odd MJPEG sequence and you need to remove 'jpegparser' in ord
 
 ## Display a hw decoded jpeg on screen
 
-Samll program to check if the VPU can decode a jpg file and display it on screen:
+Small program to check if the VPU can decode a jpg file and display it on screen:
 
 	-- build
 	cd mjpeg
@@ -1439,7 +1439,50 @@ Samll program to check if the VPU can decode a jpg file and display it on screen
 	-- run
 	./gst-mjpeg test_image.jpg
 
+## Display FPS on MJPG cameras
 
+A small Gstreamer program to display FPS o screen for MJPG cameras.
+
+	-- build
+	gcc -O2 -o gst-mjpeg-cam-fps gst-mjpeg-cam-fps.c -I /usr/share/cix/include/gstreamer-1.0 $(pkg-config --cflags --libs glib-2.0 gobject-2.0) -lm -lpthread -L/usr/share/cix/lib -lgstreamer-1.0
+	
+	-- run
+	./gst-mjpeg-cam-fps /dev/video6 1920 1080 0
+
+
+Parameters example:
+
+	videoX (ex: /dev/video6) 1920 (frame width) 1080 (frame height) 0 (or 1 = skip parsing for some old MJPEG cameras)
+	./gst-mjpeg-cam-fps /dev/video6 1920 1080 0
+
+Make sure you find the correct device node for your camera and the Frame size, like this one:
+
+	v4l2-ctl --list-formats-ext -d /dev/video6
+	ioctl: VIDIOC_ENUM_FMT
+		Type: Video Capture
+	
+		[0]: 'MJPG' (Motion-JPEG, compressed)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 1280x720
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 800x480
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 640x480
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 640x360
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 320x240
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 176x144
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 800x600
+				Interval: Discrete 0.033s (30.000 fps)
+			Size: Discrete 1920x1080
+				Interval: Discrete 0.033s (30.000 fps)
+				Interval: Discrete 0.033s (30.000 fps)
+	
 
 ## References
 
