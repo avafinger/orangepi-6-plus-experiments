@@ -1483,6 +1483,29 @@ Make sure you find the correct device node for your camera and the Frame size, l
 				Interval: Discrete 0.033s (30.000 fps)
 				Interval: Discrete 0.033s (30.000 fps)
 	
+## RTSP with MJPEG (USB Camera)
+
+This experiment is to determine how to deal with MJPEG and stream video using gstreamer RTSP.
+
+USB MJPEG camera --> decode MJPEG --> encode NV12 --> raw H264/H265 --> stream it using RTSP protocol
+
+During the experiments, I discovered that the maximum window size on my configuration (OrangePi 6 plus --> Intel x64) was limited to 1600x1200, and beyond that limit, I received the following error:
+ 	
+	[1235.739968] [pid:5324,cpu0,v4l2src0:src]MVX session: ffff80000d17bba0 v4l2: Invalid frame period from client (1/30). Return 60/1
+
+I couldn't find the reason or any explanation other than some issues related to VPU decoder/encoder working in parallel, already found on previous experiments.
+
+Also i want to find out which is better, a raw MJPEG with HTTP or MJPEG to H264/H265 RTSP, obviously using the maximum window size of the camera. It was already possible to determine that a 4000x3000 MJPEG frame is ~680 Kbytes and H265 frame can be up to ~380 Kbytes for a moving camera depending on bitrate used to have some quality. Using Wifi to stream video in my case requires low latency and some quality, so reducing it to bitrate 1.5M can have avarage results.
+
+**Orange Pi 6 Plus:**
+
+	orangepi@orangepi6plus:~$ ~/cix/camera/rtsp/test-launch "( v4l2src device=/dev/video6 ! image/jpeg,format=MJPG,width=1600,height=1200! jpegparse ! v4l2jpegdec ! video/x-raw,colorimetry=bt709,format=NV12 ! v4l2h265enc capture-io-mode=mmap output-io-mode=dmabuf extra-controls=encode,fixed_qp=38 ! video/x-h265,profile=main,level=(string)6.1 ! rtph265pay name=pay0 pt=96 config-interval=-1 )"
+	stream ready at rtsp://127.0.0.1:8554/test
+
+**Intel x64 (ancient box):**
+
+	alex@svn:/tmp/gst/rtsp-server$ gst-launch-1.0 rtspsrc location=rtsp://192.168.254.94:8554/test latency=100 drop-on-latency=true protocols=tcp ! rtph265depay ! h265parse ! avdec_h265 ! glimagesink sync=false
+
 
 ## References
 
