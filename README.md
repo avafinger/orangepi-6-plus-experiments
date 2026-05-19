@@ -1487,7 +1487,7 @@ Make sure you find the correct device node for your camera and the Frame size, l
 
 This experiment is to determine how to deal with MJPEG and stream video using gstreamer RTSP.
 
-USB MJPEG camera --> decode MJPEG --> encode NV12 --> raw H264/H265 --> stream it using RTSP protocol
+USB MJPEG camera --> decode MJPEG --> encode NV12 --> raw H264/H265 --> stream it using RTSP control protocol
 
 During the experiments, I discovered that the maximum window size on my configuration (OrangePi 6 plus --> Intel x64) was limited to 1600x1200, and beyond that limit, I received the following error:
  	
@@ -1506,6 +1506,9 @@ Also i want to find out which is better, a raw MJPEG with HTTP or MJPEG to H264/
 
 	alex@svn:/tmp/gst/rtsp-server$ gst-launch-1.0 rtspsrc location=rtsp://192.168.254.94:8554/test latency=100 drop-on-latency=true protocols=tcp ! rtph265depay ! h265parse ! avdec_h265 ! glimagesink sync=false
 
+**Using ffmpeg**
+
+	ffplay -fflags nobuffer -rtsp_transport tcp rtsp://192.168.254.94:8554/test
 
 ## References
 
